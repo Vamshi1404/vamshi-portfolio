@@ -460,10 +460,8 @@ html.boot-failed .pen { display: none; }
   text-transform: uppercase;
   white-space: nowrap;
 }
-.wordmark__mark { width: 22px; color: var(--signal); flex: none; }
-.wordmark__mark svg { width: 100%; height: auto; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+
 .wordmark__text { overflow: hidden; text-overflow: ellipsis; }
-.wordmark:hover .wordmark__mark { color: var(--ink); }
 
 /* --- nav -------------------------------------------------------------- */
 .nav { display: flex; align-items: center; gap: clamp(0.5rem, 1.6vw, 1.6rem); }
@@ -604,10 +602,12 @@ html.boot-failed .pen { display: none; }
   padding-inline: var(--gutter);
 }
 
+/* Every section opens with a legible rule, so starts and ends read clearly.
+   Same strong token the section headers already use. */
 .section {
   position: relative;
   padding-block: clamp(2.5rem, 5vw, 4.5rem);
-  border-top: var(--hairline) solid var(--rule);
+  border-top: var(--hairline) solid var(--rule-strong);
 }
 .section:first-of-type { border-top: 0; }
 
@@ -1776,6 +1776,99 @@ html.boot-failed .pen { display: none; }
 /* ==========================================================================
    13  08 — COLOPHON
    ========================================================================== */
+/* ==========================================================================
+   BEYOND + QUOTE — plain type, nothing else. No grids, no figures,
+   no cards, no animation beyond the standard subtle reveal.
+   ========================================================================== */
+/* Beyond split: prose keeps the wide column, doodle art takes the side.
+   One column on phones, art stacking below the text. */
+.beyond__split { display: grid; gap: var(--s-6) var(--gutter); }
+@media (min-width: 62rem) {
+  .beyond__split { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: center; }
+}
+.beyond__art { display: grid; gap: var(--s-5); justify-items: center; align-content: center; }
+
+/* Doodle line work: theme inks and vermilion only, no fills, round caps
+   for the hand-drawn feel. Each drawing is tilted a hair off-axis. */
+.doodle { width: 100%; max-width: 15rem; height: auto; display: block; overflow: visible; }
+.doodle--globe { transform: rotate(-4deg); }
+.doodle--gpu { transform: rotate(1.5deg); }
+.d-ink { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.d-ink2 { fill: none; stroke: var(--ink-2); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.d-sig { fill: none; stroke: var(--signal); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.d-dash { stroke-dasharray: 5 6; }
+.d-fill-sig { fill: var(--signal); stroke: none; }
+
+/* Globe spin: phase-shifted meridians scaling through the pole axis read
+   as rotation. Fans counter-rotate slowly. */
+.spin { transform-box: fill-box; transform-origin: center; animation: spin-x 7s linear infinite; }
+.spin--b { animation-delay: -2.33s; }
+.spin--c { animation-delay: -4.66s; }
+@keyframes spin-x {
+  from { transform: scaleX(1); }
+  50% { transform: scaleX(-1); }
+  to { transform: scaleX(1); }
+}
+.fan { transform-box: fill-box; transform-origin: center; animation: fan-spin 9s linear infinite; }
+.fan--b { animation-direction: reverse; animation-duration: 11s; }
+@keyframes fan-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .beyond__art .spin, .beyond__art .fan { animation: none; }
+}
+
+.beyond { display: grid; gap: var(--s-5); max-width: 50rem; }
+.beyond__lede {
+  margin: 0;
+  font-size: clamp(1.75rem, 1.3rem + 2vw, 3rem);
+  line-height: 1.1;
+  max-width: 22ch;
+  text-wrap: balance;
+}
+.beyond__prose { display: grid; gap: var(--s-4); }
+.beyond__prose p { font-size: var(--t-lead); line-height: 1.6; text-wrap: pretty; }
+
+/* Quote sits in the right-hand column of the contact split. A single
+   hairline separates it from the details; no band, no background. */
+.quote {
+  margin: 0;
+  display: grid;
+  gap: var(--s-3);
+  align-content: center;
+  border-left: var(--hairline) solid var(--rule);
+  padding-left: var(--s-5);
+}
+.quote__text {
+  margin: 0;
+  font-size: clamp(1.5rem, 1.1rem + 1.5vw, 2.75rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+/* Typographic marks via CSS so JS text updates never strip them. */
+.quote__text::before { content: "\201C"; }
+.quote__text::after { content: "\201D"; }
+.quote__sig {
+  font-size: var(--t-caption);
+  letter-spacing: 0.14em;
+  text-transform: lowercase;
+  color: var(--ink-2);
+}
+/* Quote tracks the contact grid: one column on phones, two on desktop.
+   Contact details keep the wider column and all their existing styling. */
+.contact__split { display: grid; gap: var(--s-6) var(--gutter); }
+@media (min-width: 62rem) {
+  .contact__split { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); align-items: center; }
+}
+/* Phone: the hairline reads better as a top rule. */
+@media (max-width: 61.99rem) {
+  .quote {
+    border-left: 0;
+    border-top: var(--hairline) solid var(--rule);
+    padding-left: 0;
+    padding-top: var(--s-5);
+  }
+}
+
 .colophon { border-top: var(--hairline) solid var(--rule-strong); padding-block: clamp(2.5rem, 5vw, 4rem); background: var(--paper); }
 .colophon__grid {
   display: grid;
@@ -1941,7 +2034,7 @@ html.js [data-reveal]:not(.is-in) { opacity: 0; }
      The wordmark steps down a size rather than being truncated: a clipped
      name in the header is worse than a slightly smaller one. */
   .wordmark { font-size: 0.6875rem; letter-spacing: 0.05em; gap: var(--s-2); }
-  .wordmark__mark { width: 18px; }
+
   .nav__link { font-size: 0.625rem; letter-spacing: 0.05em; }
   .hero__actions { flex-direction: column; align-items: stretch; }
   .plate--hero { grid-template-columns: 1fr; }
@@ -2017,6 +2110,7 @@ html.js [data-reveal]:not(.is-in) { opacity: 0; }
   /* Resume-only download: while `print-resume` is on <body>, hide every
      section but #resume — and inside it, only the sheet itself. */
   body.print-resume #main .section:not(#resume),
+  body.print-resume .quote,
   body.print-resume .masthead,
   body.print-resume .colophon,
   body.print-resume #resume .sec-head,

@@ -227,6 +227,7 @@ function fillSecHead(id, note) {
     record: DATA.record,
     resume: DATA.resume,
     contact: DATA.contact,
+    beyond: DATA.beyond,
   }[id];
   if (label && source?.eyebrow) label.textContent = source.eyebrow;
   if (nte && note) nte.textContent = note;
@@ -826,6 +827,37 @@ function buildResumeSheet(sheet, r) {
   sheet.appendChild(pf);
 }
 
+/* --- BEYOND + QUOTE -------------------------------------------------------
+   Additive only: two plain paragraphs and one verbatim closing line. */
+function renderBeyond() {
+  fillSecHead("beyond", "Elsewhere");
+
+  const lede = mount("[data-beyond-lede]");
+  if (lede) {
+    richText(lede, DATA.beyond.lede);
+    reveal(lede);
+  }
+
+  const body = mount("[data-beyond-body]");
+  if (body) {
+    DATA.beyond.body.forEach((para) => {
+      const p = el("p", null, para);
+      reveal(p);
+      body.appendChild(p);
+    });
+  }
+
+  /* Art is static markup: reveal it, never mount (mount clears content). */
+  const art = document.querySelector("[data-beyond-art]");
+  if (art) reveal(art);
+
+  const quote = mount("[data-quote]");
+  if (quote) {
+    quote.textContent = DATA.quote;
+    reveal(quote);
+  }
+}
+
 /* --- 07 CONTACT --------------------------------------------------------- */
 function renderContact() {
   // Only shown if a confirmed availability string is added to content.js.
@@ -1014,6 +1046,7 @@ const SECTION_ACCENT = {
   record: ["var(--signal)", "var(--signal-ink)"],
   resume: ["var(--signal)", "var(--signal-ink)"],
   contact: ["var(--signal)", "var(--signal-ink)"],
+  beyond: ["var(--signal)", "var(--signal-ink)"],
 };
 
 function initScrollState() {
@@ -1922,6 +1955,7 @@ function boot() {
     renderToolkit();
     renderRecord();
     renderResume();
+    renderBeyond();
     renderContact();
     renderFooter();
     buildConvergence();

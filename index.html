@@ -122,13 +122,6 @@
 <header class="masthead" id="masthead">
   <div class="masthead__inner">
     <a class="wordmark" href="#top" data-cursor="TOP" aria-label="Back to top">
-      <span class="wordmark__mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-          <path d="M2 17c3.2 0 3.2-4 6.4-4s3.2 4 6.4 4 3.2-4 6.4-4" />
-          <path d="M2 12c3.2 0 3.2-4 6.4-4s3.2 4 6.4 4 3.2-4 6.4-4" />
-          <path d="M2 7c3.2 0 3.2-4 6.4-4s3.2 4 6.4 4 3.2-4 6.4-4" />
-        </svg>
-      </span>
       <!-- Filled from content.js at runtime. Deliberately empty here so no
            personal detail is hardcoded in this file. -->
       <span class="wordmark__text" data-wordmark></span>
@@ -347,7 +340,85 @@
   </section>
 
   <!-- ====================================================================
-       08 — CONTACT
+       08 — BEYOND THE STACK
+       Personal and present: a large opening line plus two short paragraphs.
+       No figures, no cards.
+       ================================================================== -->
+  <section class="section section--beyond" id="beyond" aria-labelledby="beyond-heading">
+    <div class="wrap">
+      <div class="sec-head" data-sec-head>
+        <p class="sec-head__index mono" data-sec-index>08</p>
+        <h2 class="sec-head__label" id="beyond-heading" data-sec-label>Beyond the Stack</h2>
+        <p class="sec-head__note mono" data-sec-note></p>
+      </div>
+
+      <div class="beyond__split">
+        <div class="beyond">
+          <p class="beyond__lede display" data-beyond-lede></p>
+          <div class="beyond__prose" data-beyond-body></div>
+        </div>
+
+        <!-- Doodle art: hand-drawn line work only. Spinning globe, GPU
+             outline. Theme inks plus the vermilion accent. No fills. -->
+        <aside class="beyond__art" data-beyond-art aria-hidden="true">
+          <svg class="doodle doodle--globe" viewBox="0 0 200 200" focusable="false">
+            <ellipse cx="100" cy="100" rx="88" ry="30" transform="rotate(-24 100 100)" class="d-ink2 d-dash"/>
+            <circle cx="180" cy="64" r="3.5" class="d-fill-sig"/>
+            <circle cx="100" cy="100" r="70" class="d-ink"/>
+            <line x1="30" y1="100" x2="170" y2="100" class="d-ink"/>
+            <ellipse cx="100" cy="74" rx="50" ry="13" class="d-ink2 d-dash"/>
+            <ellipse cx="100" cy="126" rx="50" ry="13" class="d-ink2 d-dash"/>
+            <ellipse cx="100" cy="100" rx="64" ry="66" class="d-ink spin spin--a"/>
+            <ellipse cx="100" cy="100" rx="36" ry="66" class="d-sig spin spin--b"/>
+            <ellipse cx="100" cy="100" rx="12" ry="66" class="d-ink2 spin spin--c"/>
+            <path d="M162 52 h12 M168 46 v12" class="d-ink2"/>
+            <path d="M27 150 h10 M32 145 v10" class="d-sig"/>
+          </svg>
+
+          <svg class="doodle doodle--gpu" viewBox="0 0 240 200" focusable="false">
+            <path d="M196 30 C 210 18, 222 22, 228 10" class="d-sig"/>
+            <rect x="184" y="28" width="26" height="14" rx="2" class="d-ink"/>
+            <rect x="34" y="52" width="172" height="104" rx="8" class="d-ink"/>
+            <rect x="20" y="62" width="14" height="84" rx="2" class="d-ink2"/>
+            <rect x="23" y="72" width="8" height="12" class="d-ink2"/>
+            <rect x="23" y="90" width="8" height="12" class="d-ink2"/>
+            <g transform="translate(92,104)">
+              <circle r="30" class="d-ink"/>
+              <g class="fan fan--a">
+                <circle r="26" fill="none" stroke="none"/>
+                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2"/>
+                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2" transform="rotate(72)"/>
+                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2" transform="rotate(144)"/>
+                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2" transform="rotate(216)"/>
+                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2" transform="rotate(288)"/>
+              </g>
+              <circle r="5.5" class="d-sig"/>
+            </g>
+            <g transform="translate(160,104)">
+              <circle r="30" class="d-ink"/>
+              <g class="fan fan--b">
+                <circle r="26" fill="none" stroke="none"/>
+                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2"/>
+                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2" transform="rotate(72)"/>
+                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2" transform="rotate(144)"/>
+                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2" transform="rotate(216)"/>
+                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2" transform="rotate(288)"/>
+              </g>
+              <circle r="5.5" class="d-sig"/>
+            </g>
+            <rect x="70" y="156" width="56" height="14" class="d-ink2"/>
+            <line x1="84" y1="156" x2="84" y2="170" class="d-ink2"/>
+            <rect x="44" y="132" width="12" height="12" class="d-ink2"/>
+            <rect x="182" y="132" width="12" height="12" class="d-sig"/>
+            <path d="M217 118 h10 M222 113 v10" class="d-ink2"/>
+          </svg>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       09 — CONTACT
        Plain closing: large statement, short lede, direct mailto CTA plus
        public profiles. No form, no tracking, no decorative figure.
        ================================================================== -->
@@ -355,21 +426,30 @@
 
     <div class="wrap">
       <div class="sec-head" data-sec-head>
-        <p class="sec-head__index mono" data-sec-index>08</p>
+        <p class="sec-head__index mono" data-sec-index>09</p>
         <h2 class="sec-head__label" id="contact-heading" data-sec-label>Contact</h2>
         <p class="sec-head__note mono" data-sec-note></p>
       </div>
 
-      <div class="contact">
-        <p class="contact__headline display" data-contact-headline></p>
-        <p class="contact__lede" data-contact-lede></p>
+      <div class="contact__split">
+        <div class="contact">
+          <p class="contact__headline display" data-contact-headline></p>
+          <p class="contact__lede" data-contact-lede></p>
 
-        <div class="contact__cta">
-          <a class="btn btn--primary btn--lg" href="#" data-contact-cta data-magnetic data-cursor="EMAIL"></a>
-          <p class="contact__ctanote mono" data-contact-ctanote></p>
+          <div class="contact__cta">
+            <a class="btn btn--primary btn--lg" href="#" data-contact-cta data-magnetic data-cursor="EMAIL"></a>
+            <p class="contact__ctanote mono" data-contact-ctanote></p>
+          </div>
+
+          <dl class="contact__records" data-contact-records></dl>
         </div>
 
-        <dl class="contact__records" data-contact-records></dl>
+        <!-- Final thought, set beside the contact details. Typographic marks,
+             small signature. No heading, no explanation, no decoration. -->
+        <figure class="quote" aria-label="Closing thought">
+          <blockquote class="quote__text display" data-quote>Learn from everything, for knowledge is the highest pursuit.</blockquote>
+          <figcaption class="quote__sig mono">-me</figcaption>
+        </figure>
       </div>
     </div>
   </section>

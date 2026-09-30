@@ -604,6 +604,21 @@ const portfolio = {
   },
 
   /* -----------------------------------------------------------------------
+     beyond — personal, non-resume. Two short paragraphs in a casual voice.
+     --------------------------------------------------------------------- */
+  beyond: {
+    eyebrow: "Beyond the Stack",
+    lede: "I like knowing how things work, from silicon to space.",
+    body: [
+      "Outside the usual stack, I tend to disappear into questions like why one GPU handles a workload differently from another, what actually makes one server architecture better than the next, or how much performance you can squeeze out of a system. I like comparing hardware and understanding the trade-offs behind performance, efficiency, cost, and scale, down to CPUs, memory, storage, and networking.",
+      "I also keep coming back to physics and space. Somewhere down the line I would like to work with a space organization, or contribute software, tools, or infrastructure to space-related work. More generally, I think knowledge is worth picking up wherever it comes from. I like learning across disciplines, mostly because things are interesting.",
+    ],
+  },
+
+  /* Final thought. Rendered verbatim after Contact. No attribution. */
+  quote: "Learn from everything, for knowledge is the highest pursuit.",
+
+  /* -----------------------------------------------------------------------
      footer — colophon. Deliberately technical, like the back of a chart plate.
      --------------------------------------------------------------------- */
   footer: {
