@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portfolio</title>
+<meta name="description" content="Loading portfolio.">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f5f2ec">
+<!--
+  index.html contains STRUCTURE ONLY.
+
+  Every piece of personal, project, skill and link content lives in content.js.
+  The <title> and <meta name="description"> above are placeholders that main.js
+  overwrites from content.js at runtime, so this file never needs editing when
+  the portfolio is personalised.
+
+  This is a static, build-free site: it runs from GitHub Pages, from a local
+  file server, or from any plain HTTP host. No backend, no API, no env vars.
+-->
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://esm.sh" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script>
+  /* Set before first paint so reveal elements start in their hidden state and
+     no content ever flashes in and out. The `html:not(.js)` rules in
+     styles.css guarantee everything stays visible if scripting is off.
+
+     The `js` class is also a promise: that main.js will replace the static
+     shell with the real content from content.js. This block is the safety
+     net for when that promise is broken -- a 404, a syntax error, or the page
+     being opened straight off the filesystem, where module loading is blocked.
+     Any of those would otherwise leave a blank page with no explanation, so we
+     un-hide everything and say what went wrong instead. */
+  (function () {
+    var root = document.documentElement;
+    var booted = false;
+    root.classList.add('js');
+
+    function fail(reason, detail) {
+      if (booted) return;
+      booted = true;
+      root.classList.add('boot-failed');
+      root.classList.remove('js');
+
+      var box = document.createElement('div');
+      box.className = 'bootnotice';
+      box.setAttribute('role', 'alert');
+
+      var h = document.createElement('p');
+      h.className = 'bootnotice__title';
+      h.textContent = reason;
+      box.appendChild(h);
+
+      var p = document.createElement('p');
+      p.textContent = detail;
+      box.appendChild(p);
+
+      var pre = document.createElement('pre');
+      pre.className = 'bootnotice__cmd';
+      pre.textContent = 'cd vamshi-portfolio\npython -m http.server 8000';
+      box.appendChild(pre);
+
+      var tail = document.createElement('p');
+      tail.className = 'bootnotice__tail';
+      tail.textContent = 'then open http://localhost:8000';
+      box.appendChild(tail);
+
+      var mount = function () {
+        (document.body || root).appendChild(box);
+      };
+      if (document.body) mount();
+      else document.addEventListener('DOMContentLoaded', mount);
+    }
+
+    // Opened from the filesystem: ES modules and the import map are blocked by
+    // the browser's file:// rules, so nothing can ever boot. Say so at once
+    // rather than waiting for a timeout.
+    if (location.protocol === 'file:') {
+      fail('This page needs to be served over HTTP.',
+           'Opening index.html directly from the filesystem blocks ES modules, ' +
+           'so the content in content.js cannot load. Start a local server:');
+      return;
+    }
+
+    // A load error or an uncaught throw anywhere: recover immediately.
+    window.addEventListener('error', function (e) {
+      var tag = e && e.target && e.target.tagName;
+      if (tag === 'SCRIPT' || tag === 'LINK') {
+        fail('A required file failed to load.',
+             'The page could not load ' + ((e.target.src || e.target.href) || 'a dependency') +
+             '. Check the file names and try reloading.');
+      } else {
+        fail('The page hit a scripting error.',
+             'Rendering stopped early. The details are in the browser console.');
+      }
+    }, true);
+
+    // Last resort: if main.js never reports success, un-hide the static shell.
+    setTimeout(function () {
+      if (window.__PLOT_BOOTED) return;
+      fail('The portfolio did not finish loading.',
+           'This usually means content.js or main.js could not be read. Serve the ' +
+           'folder over HTTP and reload:');
+    }, 6000);
+  })();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ======================================================================
+     FIXED CHROME
+     - The masthead holds the wordmark and the anchor navigation.
+     - The rail on the left is the chart spine; purely decorative.
+     - The plotter pen is a desktop-only custom cursor, aria-hidden.
+     ================================================================== -->
+<header class="masthead" id="masthead">
+  <div class="masthead__inner">
+    <a class="wordmark" href="#top" data-cursor="TOP" aria-label="Back to top">
+      <span class="wordmark__mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+          <path d="M2 17c3.2 0 3.2-4 6.4-4s3.2 4 6.4 4 3.2-4 6.4-4" />
+          <path d="M2 12c3.2 0 3.2-4 6.4-4s3.2 4 6.4 4 3.2-4 6.4-4" />
+          <path d="M2 7c3.2 0 3.2-4 6.4-4s3.2 4 6.4 4 3.2-4 6.4-4" />
+        </svg>
+      </span>
+      <!-- Filled from content.js at runtime. Deliberately empty here so no
+           personal detail is hardcoded in this file. -->
+      <span class="wordmark__text" data-wordmark></span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Section navigation" data-nav></nav>
+  </div>
+  <div class="masthead__progress" aria-hidden="true"><i data-progress></i></div>
+</header>
+
+<div class="spine" aria-hidden="true">
+  <span class="spine__ticks"></span>
+</div>
+
+<!-- Custom cursor. Desktop + fine pointer only, never on touch. -->
+<div class="pen" data-pen aria-hidden="true">
+  <svg class="pen__cross" viewBox="0 0 40 40" focusable="false">
+    <path d="M20 4v9M20 27v9M4 20h9M27 20h9" />
+    <circle cx="20" cy="20" r="1.6" class="pen__dot" />
+  </svg>
+  <span class="pen__label" data-pen-label></span>
+  <span class="pen__coords" data-pen-coords>0.000 0.000</span>
+</div>
+
+<main id="main">
+
+  <!-- ====================================================================
+       01 — HERO
+       The typographic layer is server-free HTML rendered from content.js and
+       paints immediately. The Three.js contour terrain mounts behind it after
+       first paint. A static SVG contour plate sits underneath as the fallback
+       if WebGL is unavailable or motion is reduced.
+       ================================================================== -->
+  <section class="hero" id="top" aria-labelledby="hero-heading">
+    <div class="hero__terrain" data-terrain aria-hidden="true">
+      <canvas data-terrain-canvas></canvas>
+      <svg class="hero__fallback" data-terrain-fallback viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" focusable="false">
+        <g fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke">
+          <path d="M-20 380 C 120 300, 180 420, 300 350 S 520 250, 640 330 820 300 860 300" />
+          <path d="M-20 340 C 120 260, 180 380, 300 310 S 520 210, 640 290 820 260 860 260" />
+          <path d="M-20 300 C 120 220, 180 340, 300 270 S 520 170, 640 250 820 220 860 220" />
+          <path d="M-20 260 C 120 180, 180 300, 300 230 S 520 130, 640 210 820 180 860 180" />
+          <path d="M-20 220 C 120 140, 180 260, 300 190 S 520 90, 640 170 820 140 860 140" />
+          <path d="M-20 180 C 120 100, 180 220, 300 150 S 520 50, 640 130 820 100 860 100" />
+          <path d="M-20 420 C 120 340, 180 460, 300 390 S 520 290, 640 370 820 340 860 340" />
+          <path d="M-20 460 C 120 380, 180 500, 300 430 S 520 330, 640 410 820 380 860 380" />
+        </g>
+        <g class="hero__fallback-marker">
+          <path d="M420 250h22M431 239v22" stroke="currentColor" stroke-width="1.4" fill="none" />
+          <circle cx="431" cy="250" r="3" fill="currentColor" />
+        </g>
+      </svg>
+    </div>
+
+    <div class="hero__grid">
+      <p class="hero__eyebrow mono" data-hero-eyebrow></p>
+
+      <h1 class="hero__name" id="hero-heading" data-hero-name></h1>
+
+      <p class="hero__positioning" data-hero-positioning></p>
+
+      <p class="hero__statement" data-hero-statement></p>
+
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="#work" data-magnetic data-cursor="SEE WORK">Selected work</a>
+        <a class="btn btn--ghost" href="#contact" data-magnetic data-cursor="CONTACT">Get in touch</a>
+      </div>
+
+      <dl class="plate plate--hero" data-hero-readouts aria-label="Key facts"></dl>
+
+      <p class="hero__scroll mono" aria-hidden="true">
+        <span class="hero__scroll-tick"></span>
+        Scroll to plot
+      </p>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       02 — ABOUT
+       Asymmetric editorial composition: a drop-capped biography spanning the
+       main measure, with mono marginalia pinned into the outer gutter on
+       wide viewports. There is no image-left / text-right split anywhere.
+       ================================================================== -->
+  <section class="section section--about" id="about" aria-labelledby="about-heading">
+    <div class="wrap">
+      <div class="sec-head" data-sec-head>
+        <p class="sec-head__index mono" data-sec-index>02</p>
+        <h2 class="sec-head__label" id="about-heading" data-sec-label>About</h2>
+        <p class="sec-head__note mono" data-sec-note></p>
+      </div>
+
+      <div class="about">
+        <div class="about__lede">
+          <p class="about__headline display" data-about-headline></p>
+        </div>
+
+        <div class="about__body">
+          <div class="about__prose" data-about-body></div>
+
+          <aside class="about__margin" aria-label="Marginalia">
+            <dl data-about-marginalia></dl>
+          </aside>
+        </div>
+
+        <dl class="spec" data-about-spec aria-label="Specification"></dl>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ====================================================================
+       05 — TOOLKIT
+       "The Stack": five groups rendered expanded. Each header is a real
+       <button aria-expanded> controlling a real region, so the whole
+       section is keyboard-operable and stays readable on mobile.
+       No tag cloud, no progress bars, no percentages.
+       ================================================================== -->
+  <section class="section section--toolkit" id="toolkit" aria-labelledby="toolkit-heading">
+    <div class="wrap">
+      <div class="sec-head" data-sec-head>
+        <p class="sec-head__index mono" data-sec-index>03</p>
+        <h2 class="sec-head__label" id="toolkit-heading" data-sec-label>The Stack</h2>
+        <p class="sec-head__note mono" data-sec-note></p>
+      </div>
+
+      <div class="toolkit">
+        <p class="toolkit__headline display" data-toolkit-headline></p>
+        <p class="toolkit__lede" data-toolkit-lede></p>
+        <div class="stack" data-toolkit-stack></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       03 — SELECTED WORK
+       Rendered from content.js. Each project is title + description +
+       Problem / System / Approach / Result + link + stack inside the same
+       hairline plate frame. No diagrams, no captions — content only.
+       ================================================================== -->
+  <section class="section section--work" id="work" aria-labelledby="work-heading">
+    <div class="wrap">
+      <div class="sec-head" data-sec-head>
+        <p class="sec-head__index mono" data-sec-index>04</p>
+        <h2 class="sec-head__label" id="work-heading" data-sec-label>Selected Work</h2>
+        <p class="sec-head__note mono" data-sec-note></p>
+      </div>
+
+      <p class="section__headline display" data-work-headline></p>
+
+      <div class="plates" data-work-list></div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       04 — OPEN SOURCE
+       A technical annex, deliberately not a project plate: plain ground,
+       a router diagram, and instrument readouts. One part of a broader
+       practice — not the whole narrative.
+       ================================================================== -->
+  <section class="section section--oss" id="open-source" aria-labelledby="oss-heading">
+    <div class="wrap">
+      <div class="sec-head" data-sec-head>
+        <p class="sec-head__index mono" data-sec-index>05</p>
+        <h2 class="sec-head__label" id="oss-heading" data-sec-label>Open Source</h2>
+        <p class="sec-head__note mono" data-sec-note></p>
+      </div>
+
+      <div data-oss-list></div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       06 — RECORD
+       A chronological ledger. No employment history is invented:
+       education is the anchor, open-source work supports it.
+       ================================================================== -->
+  <section class="section section--record" id="record" aria-labelledby="record-heading">
+    <div class="wrap">
+      <div class="sec-head" data-sec-head>
+        <p class="sec-head__index mono" data-sec-index>06</p>
+        <h2 class="sec-head__label" id="record-heading" data-sec-label>Record</h2>
+        <p class="sec-head__note mono" data-sec-note></p>
+      </div>
+
+      <div class="record">
+        <p class="record__headline display" data-record-headline></p>
+        <ol class="ledger" data-record-list></ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       07 — RESUME
+       The resume as a themed sheet: same paper, ink, serif + mono voices.
+       A download button prints this sheet alone to PDF — no backend.
+       ================================================================== -->
+  <section class="section section--resume" id="resume" aria-labelledby="resume-heading">
+    <div class="wrap">
+      <div class="sec-head" data-sec-head>
+        <p class="sec-head__index mono" data-sec-index>07</p>
+        <h2 class="sec-head__label" id="resume-heading" data-sec-label>Resume</h2>
+        <p class="sec-head__note mono" data-sec-note></p>
+      </div>
+
+      <div class="resume">
+        <p class="resume__headline display" data-resume-headline></p>
+        <p class="resume__lede" data-resume-lede></p>
+
+        <div class="resume__actions">
+          <a class="btn btn--primary" href="#" data-resume-download data-magnetic data-cursor="PDF"></a>
+          <p class="resume__note mono" data-resume-note></p>
+        </div>
+
+        <article class="rsheet" data-resume-sheet aria-label="Resume"></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       08 — CONTACT
+       Plain closing: large statement, short lede, direct mailto CTA plus
+       public profiles. No form, no tracking, no decorative figure.
+       ================================================================== -->
+  <section class="section section--contact" id="contact" aria-labelledby="contact-heading">
+
+    <div class="wrap">
+      <div class="sec-head" data-sec-head>
+        <p class="sec-head__index mono" data-sec-index>08</p>
+        <h2 class="sec-head__label" id="contact-heading" data-sec-label>Contact</h2>
+        <p class="sec-head__note mono" data-sec-note></p>
+      </div>
+
+      <div class="contact">
+        <p class="contact__headline display" data-contact-headline></p>
+        <p class="contact__lede" data-contact-lede></p>
+
+        <div class="contact__cta">
+          <a class="btn btn--primary btn--lg" href="#" data-contact-cta data-magnetic data-cursor="EMAIL"></a>
+          <p class="contact__ctanote mono" data-contact-ctanote></p>
+        </div>
+
+        <dl class="contact__records" data-contact-records></dl>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ======================================================================
+     08 — FOOTER — technical colophon.
+     ================================================================== -->
+<footer class="colophon" id="colophon">
+  <div class="wrap">
+    <div class="colophon__grid">
+      <div class="colophon__brand">
+        <p class="colophon__name display" data-footer-name></p>
+        <p class="colophon__role mono" data-footer-role></p>
+      </div>
+      <div class="colophon__meta">
+        <p class="mono" data-footer-note></p>
+        <p class="mono colophon__colophon" data-footer-colophon></p>
+      </div>
+      <div class="colophon__top">
+        <a class="totop" href="#top" data-cursor="TOP" data-footer-totop></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<noscript>
+  <div class="noscript">
+    <p><strong>This portfolio renders its content with JavaScript.</strong></p>
+    <p>Please enable JavaScript to read it. No content is hardcoded into this
+      file &mdash; every detail lives in <code>content.js</code>, so it stays
+      accurate as the portfolio is updated.</p>
+  </div>
+</noscript>
+
+<!-- Static SVG favicon: the contour mark from the wordmark. -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://esm.sh/three@0.169.0",
+    "animejs": "https://esm.sh/animejs@3.2.2",
+    "react": "https://esm.sh/react@18.3.1",
+    "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+    "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
+    "framer-motion": "https://esm.sh/framer-motion@11.11.17?external=react",
+    "htm": "https://esm.sh/htm@3.1.1"
+  }
+}
+</script>
+
+<!-- content.js first: it is plain data with no dependencies. -->
+<script src="content.js"></script>
+<!-- main.js is a module: everything else is loaded through the import map. -->
+<script type="module" src="main.js"></script>
+
+</body>
+</html>

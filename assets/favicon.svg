@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Plot">
+  <rect width="64" height="64" fill="#f5f2ec"/>
+  <g fill="none" stroke="#1a1815" stroke-width="3" stroke-linecap="round">
+    <path d="M8 46c8 0 8-10 16-10s8 10 16 10 8-10 16-10"/>
+    <path d="M8 36c8 0 8-10 16-10s8 10 16 10 8-10 16-10"/>
+    <path d="M8 26c8 0 8-10 16-10s8 10 16 10 8-10 16-10"/>
+  </g>
+  <g fill="none" stroke="#c23c17" stroke-width="3" stroke-linecap="round">
+    <path d="M26 31h12M32 25v12"/>
+  </g>
+</svg>
