@@ -106,14 +106,14 @@
    /* Type scale, kept compact. Body is 17px; lead descriptions run
       20–24px; headings carry hierarchy without dominating. Small metadata
       stays legible at 14px minimum — nothing informative drops below that. */
-   --t-micro:  0.875rem;   /* 14px — mono ticks and axis labels ONLY       */
-   --t-caption:0.9375rem;  /* 15px — mono captions, meta rows (min legible)*/
-   --t-small:  1rem;       /* 16px — secondary prose                       */
-   --t-body:   1.0625rem;  /* 17px — body default                          */
-   --t-lead:   clamp(1.25rem, 1.1rem + 0.7vw, 1.5rem);
-   --t-h3:     clamp(1.5rem, 1.25rem + 0.9vw, 1.875rem);
-   --t-h2:     clamp(2rem, 1.55rem + 1.9vw, 3rem);
-   --t-h1:     clamp(2.5rem, 1.1rem + 5.8vw, 6rem);
+   --t-micro:  0.875rem;   /* 14px — mono ticks ONLY, never body text      */
+   --t-caption:0.875rem;   /* 14px — mono captions, meta rows               */
+   --t-small:  0.9375rem;  /* 15px — secondary prose                       */
+   --t-body:   1rem;       /* 16px — body default                          */
+   --t-lead:   clamp(1.125rem, 1rem + 0.6vw, 1.375rem);
+   --t-h3:     clamp(1.375rem, 1.15rem + 0.8vw, 1.75rem);
+   --t-h2:     clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+   --t-h1:     clamp(2.25rem, 1rem + 5vw, 5rem);
 
   /* --- space: strict 4px baseline ------------------------------------- */
   --s-1: 0.25rem;  --s-2: 0.5rem;   --s-3: 0.75rem;  --s-4: 1rem;
@@ -431,21 +431,7 @@ html.boot-failed .pen { display: none; }
   gap: var(--s-5);
 }
 
-/* Reading-progress hairline: the page's own "how far along the plot" trace. */
-.masthead__progress {
-  height: var(--hairline);
-  background: var(--rule-soft);
-  overflow: hidden;
-}
-.masthead__progress i {
-  display: block;
-  height: 100%;
-  width: 100%;
-  background: var(--live-accent);
-  transform: scaleX(var(--p, 0));
-  transform-origin: left center;
-  transition: transform 90ms linear, background-color var(--dur-3) var(--ease-swap);
-}
+/* Reading-progress bar removed: static build, nothing to track. */
 
 .wordmark {
   display: inline-flex;
@@ -530,68 +516,7 @@ html.boot-failed .pen { display: none; }
 .spine__ticks { display: none; }
 
 /* --- the plotter pen: custom cursor, desktop + fine pointer only ------ */
-.pen {
-  position: fixed;
-  top: 0; left: 0;
-  z-index: 120;
-  pointer-events: none;
-  opacity: 0;
-  will-change: transform;
-  transition: opacity var(--dur-1) linear;
-  /* multiply so the pen darkens the paper underneath it like real ink. */
-  mix-blend-mode: multiply;
-}
-.pen[data-active="true"] { opacity: 1; }
-.pen__cross {
-  position: absolute;
-  top: -20px; left: -20px;
-  width: 40px; height: 40px;
-  fill: none;
-  stroke: var(--signal);
-  stroke-width: 1.2;
-  stroke-linecap: round;
-}
-.pen__dot { fill: var(--signal); stroke: none; }
-/* On hover the crosshair arms: the arms extend and a small square appears. */
-.pen__cross path {
-  transition: transform var(--dur-2) var(--ease-expo);
-  transform-origin: 20px 20px;
-}
-.pen[data-armed="true"] .pen__cross path:nth-child(1) { transform: scaleY(1.5); }
-.pen[data-armed="true"] .pen__cross path:nth-child(2) { transform: scaleY(1.5); }
-.pen[data-armed="true"] .pen__cross path:nth-child(3) { transform: scaleX(1.5); }
-.pen[data-armed="true"] .pen__cross path:nth-child(4) { transform: scaleX(1.5); }
-
-.pen__label {
-  position: absolute;
-  top: 14px; left: 16px;
-  padding: 0.28rem 0.5rem;
-  background: var(--signal);
-  color: var(--paper);
-  font-family: var(--font-mono);
-  font-size: var(--t-micro);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  opacity: 0;
-  transform: translateY(-3px);
-  transition: opacity var(--dur-1) var(--ease-swap), transform var(--dur-1) var(--ease-swap);
-}
-.pen[data-armed="true"] .pen__label { opacity: 1; transform: translateY(0); }
-
-.pen__coords {
-  position: absolute;
-  bottom: 12px; left: 14px;
-  font-family: var(--font-mono);
-  font-size: var(--t-micro);
-  letter-spacing: 0.1em;
-  color: var(--ink-2);
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-  opacity: 0;
-  transition: opacity var(--dur-1) linear;
-}
-.pen[data-armed="true"] .pen__coords { opacity: 1; }
+/* Custom cursor removed: static build, native pointer everywhere. */
 
 /* ==========================================================================
    05  SECTION FRAME
@@ -606,7 +531,7 @@ html.boot-failed .pen { display: none; }
    Same strong token the section headers already use. */
 .section {
   position: relative;
-  padding-block: clamp(2.5rem, 5vw, 4.5rem);
+  padding-block: clamp(2rem, 4vw, 3.5rem);
   border-top: var(--hairline) solid var(--rule-strong);
 }
 .section:first-of-type { border-top: 0; }
@@ -656,14 +581,10 @@ html.boot-failed .pen { display: none; }
    opacity with a transform — never opacity alone — and is staggered by
    --i (set inline by main.js). Hidden until JS runs so that a failed script
    never leaves invisible content. */
+/* Static build: reveal targets render fully visible, no motion. */
 [data-reveal] {
-  opacity: 0;
-  transform: translate3d(0, var(--reveal-y, 18px), 0);
-  transition:
-    opacity var(--dur-3) var(--ease-expo),
-    transform var(--dur-3) var(--ease-expo);
-  transition-delay: calc(var(--i, 0) * 70ms);
-  will-change: opacity, transform;
+  opacity: 1;
+  transform: none;
 }
 [data-reveal="left"]  { --reveal-y: 0; transform: translate3d(-22px, 0, 0); }
 [data-reveal="right"] { --reveal-y: 0; transform: translate3d(22px, 0, 0); }
@@ -685,7 +606,7 @@ html.boot-failed .pen { display: none; }
    ========================================================================== */
 .hero {
   position: relative;
-  min-height: 92svh;
+  min-height: 80svh;
   display: flex;
   align-items: flex-end;
   padding-top: 5.5rem;
@@ -694,35 +615,7 @@ html.boot-failed .pen { display: none; }
   isolation: isolate;
 }
 
-/* The terrain sits behind the type, bleeding off the right edge. */
-.hero__terrain {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  color: var(--ink);
-  pointer-events: none;
-  /* A faint plotter grid grounds the scene and keeps the hero from reading
-     as an empty void if WebGL never mounts. */
-  background-image:
-    linear-gradient(to right, var(--rule-soft) var(--hairline), transparent var(--hairline)),
-    linear-gradient(to bottom, var(--rule-soft) var(--hairline), transparent var(--hairline));
-  background-size: 88px 88px;
-  background-position: center;
-  mask-image: radial-gradient(115% 90% at 78% 42%, #000 30%, transparent 78%);
-  -webkit-mask-image: radial-gradient(115% 90% at 78% 42%, #000 30%, transparent 78%);
-}
-.hero__terrain canvas { width: 100%; height: 100%; opacity: 0; transition: opacity var(--dur-4) var(--ease-swap); }
-.hero__terrain[data-webgl="on"] canvas { opacity: 1; }
-.hero__fallback {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  color: var(--rule-strong);
-  opacity: 0.9;
-  transition: opacity var(--dur-4) var(--ease-swap);
-}
-.hero__terrain[data-webgl="on"] .hero__fallback { opacity: 0; }
-.hero__fallback-marker { color: var(--signal); }
+/* Terrain removed: the hero is plain type on clean paper. */
 
 .hero__grid {
   position: relative;
@@ -808,25 +701,7 @@ html.boot-failed .pen { display: none; }
   color: var(--ink-2);
   margin-top: var(--s-3);
 }
-.hero__scroll-tick {
-  position: relative;
-  width: 1px; height: 2.25rem;
-  background: var(--rule-strong);
-  overflow: hidden;
-}
-.hero__scroll-tick::after {
-  content: "";
-  position: absolute;
-  inset: 0 auto auto 0;
-  width: 1px; height: 40%;
-  background: var(--signal);
-  animation: pen-travel 2.6s var(--ease-plot) infinite;
-}
-@keyframes pen-travel {
-  0%   { transform: translateY(-100%); }
-  60%  { transform: translateY(250%); }
-  100% { transform: translateY(250%); }
-}
+/* Scroll cue removed: static page, nothing to animate. */
 
 /* ==========================================================================
    07  02 — ABOUT
@@ -957,7 +832,7 @@ html.boot-failed .pen { display: none; }
   line-height: 0.95;
   letter-spacing: -0.018em;
 }
-.plateframe--flagship .pf__title { font-size: clamp(2rem, 1.1rem + 3.6vw, 3.75rem); }
+.plateframe--flagship .pf__title { font-size: clamp(1.75rem, 1rem + 3vw, 3rem); }
 .pf__sub {
   font-family: var(--font-body);
   font-size: var(--t-lead);
@@ -1306,13 +1181,7 @@ html.boot-failed .pen { display: none; }
   stroke: var(--rule-strong);
   stroke-width: 1.25;
 }
-.graphsvg .edge--flow {
-  stroke: var(--signal);
-  stroke-width: 1.6;
-  stroke-dasharray: 4 5;
-  animation: flow-dash 1.6s linear infinite;
-}
-@keyframes flow-dash { to { stroke-dashoffset: -18; } }
+/* Flow animation removed with the diagram components: static build. */
 
 .graphnodes { position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; }
 .graphnode {
@@ -1419,7 +1288,7 @@ html.boot-failed .pen { display: none; }
 .router__fig .r-label { fill: var(--ink); font-family: var(--font-body); font-size: 12.5px; }
 .router__fig .r-axis { fill: var(--ink-3); font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.22em; }
 .router__fig .r-wire { fill: none; stroke: var(--rule-strong); stroke-width: 1.25; vector-effect: non-scaling-stroke; }
-.router__fig .r-wire--live { stroke: var(--signal); stroke-width: 1.6; stroke-dasharray: 4 4; animation: flow-dash 1.6s linear infinite; }
+/* Router diagram removed: wire rules below are dead but harmless. */
 .router__fig .r-wire--fallback { stroke: var(--ink-3); stroke-dasharray: 2 4; }
 .router__note {
   display: flex;
@@ -1643,7 +1512,7 @@ html.boot-failed .pen { display: none; }
   padding-bottom: var(--s-4);
   border-bottom: var(--hairline) solid var(--rule-strong);
 }
-.rsheet__name { margin: 0; font-size: clamp(1.75rem, 1.25rem + 2vw, 2.5rem); line-height: 1; }
+.rsheet__name { margin: 0; font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.125rem); line-height: 1; }
 .rsheet__role { margin: 0; color: var(--signal-ink); }
 .rsheet__contact { margin: 0; text-transform: none; letter-spacing: 0.02em; }
 .rsheet__contact a { color: var(--ink); }
@@ -1717,7 +1586,7 @@ html.boot-failed .pen { display: none; }
 .contact { display: grid; gap: var(--s-5); }
 .contact__headline {
   margin: 0;
-  font-size: clamp(2rem, 1.35rem + 3.2vw, 3.5rem);
+  font-size: clamp(1.75rem, 1.2rem + 2.8vw, 3rem);
   line-height: 0.98;
   max-width: 20ch;
   text-indent: -0.04em;
@@ -1780,46 +1649,12 @@ html.boot-failed .pen { display: none; }
    BEYOND + QUOTE — plain type, nothing else. No grids, no figures,
    no cards, no animation beyond the standard subtle reveal.
    ========================================================================== */
-/* Beyond split: prose keeps the wide column, doodle art takes the side.
-   One column on phones, art stacking below the text. */
-.beyond__split { display: grid; gap: var(--s-6) var(--gutter); }
-@media (min-width: 62rem) {
-  .beyond__split { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: center; }
-}
-.beyond__art { display: grid; gap: var(--s-5); justify-items: center; align-content: center; }
-
-/* Doodle line work: theme inks and vermilion only, no fills, round caps
-   for the hand-drawn feel. Each drawing is tilted a hair off-axis. */
-.doodle { width: 100%; max-width: 15rem; height: auto; display: block; overflow: visible; }
-.doodle--globe { transform: rotate(-4deg); }
-.doodle--gpu { transform: rotate(1.5deg); }
-.d-ink { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.d-ink2 { fill: none; stroke: var(--ink-2); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.d-sig { fill: none; stroke: var(--signal); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.d-dash { stroke-dasharray: 5 6; }
-.d-fill-sig { fill: var(--signal); stroke: none; }
-
-/* Globe spin: phase-shifted meridians scaling through the pole axis read
-   as rotation. Fans counter-rotate slowly. */
-.spin { transform-box: fill-box; transform-origin: center; animation: spin-x 7s linear infinite; }
-.spin--b { animation-delay: -2.33s; }
-.spin--c { animation-delay: -4.66s; }
-@keyframes spin-x {
-  from { transform: scaleX(1); }
-  50% { transform: scaleX(-1); }
-  to { transform: scaleX(1); }
-}
-.fan { transform-box: fill-box; transform-origin: center; animation: fan-spin 9s linear infinite; }
-.fan--b { animation-direction: reverse; animation-duration: 11s; }
-@keyframes fan-spin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) {
-  .beyond__art .spin, .beyond__art .fan { animation: none; }
-}
+/* Doodle art removed: Beyond is plain text on clean paper. */
 
 .beyond { display: grid; gap: var(--s-5); max-width: 50rem; }
 .beyond__lede {
   margin: 0;
-  font-size: clamp(1.5rem, 1.15rem + 1.7vw, 2.5rem);
+  font-size: clamp(1.375rem, 1.05rem + 1.5vw, 2.125rem);
   line-height: 1.1;
   max-width: 22ch;
   text-wrap: balance;
@@ -1839,7 +1674,7 @@ html.boot-failed .pen { display: none; }
 }
 .quote__text {
   margin: 0;
-  font-size: clamp(1.375rem, 1rem + 1.3vw, 2.25rem);
+  font-size: clamp(1.25rem, 0.95rem + 1.1vw, 2rem);
   line-height: 1.12;
   letter-spacing: -0.015em;
   text-wrap: balance;
@@ -1867,6 +1702,78 @@ html.boot-failed .pen { display: none; }
     padding-left: 0;
     padding-top: var(--s-5);
   }
+}
+
+/* ==========================================================================
+   FOLDS — click-to-expand rows. Native details/summary: no JS, keyboard
+   accessible, identical on every host.
+   ========================================================================== */
+.fold { border-top: var(--hairline) solid var(--rule); }
+.fold:last-child { border-bottom: var(--hairline) solid var(--rule); }
+.fold__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-4);
+  padding: var(--s-4) 0;
+  cursor: pointer;
+  list-style: none;
+}
+.fold__head::-webkit-details-marker { display: none; }
+.fold__head::marker { content: ""; }
+.fold__head:hover .fold__title { color: var(--signal-ink); }
+.fold__titles { display: grid; gap: var(--s-1); min-width: 0; }
+.fold__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35em 0.9em;
+  font-family: var(--font-mono);
+  font-size: var(--t-caption);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.fold__title {
+  font-family: var(--font-display);
+  font-size: var(--t-h3);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.fold__sub { font-size: var(--t-small); color: var(--ink-2); }
+.fold__count {
+  margin-left: auto;
+  flex: none;
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--s-3);
+  font-family: var(--font-mono);
+  font-size: var(--t-caption);
+  letter-spacing: 0.1em;
+  color: var(--ink-2);
+}
+.fold__sign {
+  margin-left: auto;
+  flex: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--signal-ink);
+  transition: transform var(--dur-2) var(--ease-swap);
+}
+.fold__count .fold__sign { margin-left: 0; }
+.fold[open] > .fold__head .fold__sign { transform: rotate(45deg); }
+.fold__body {
+  display: grid;
+  gap: var(--s-3);
+  align-content: start;
+  padding-bottom: var(--s-5);
+}
+.fold__metrics {
+  display: grid;
+  gap: var(--s-1);
+  font-family: var(--font-mono);
+  font-size: var(--t-caption);
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
 }
 
 .colophon { border-top: var(--hairline) solid var(--rule-strong); padding-block: clamp(2.5rem, 5vw, 4rem); background: var(--paper); }
@@ -1908,8 +1815,8 @@ html.boot-failed .pen { display: none; }
 html:not(.js) [data-reveal] { opacity: 1; transform: none; }
 html:not(.js) .draw-path { stroke-dashoffset: 0; }
 html:not(.js) .hero__terrain { display: none; }
-/* Once JS is running, reveals are armed. */
-html.js [data-reveal]:not(.is-in) { opacity: 0; }
+/* Static build: reveals never hide. Content is visible with or without JS. */
+html.js [data-reveal]:not(.is-in) { opacity: 1; transform: none; }
 
 /* ==========================================================================
    15  RESPONSIVE
@@ -2053,7 +1960,7 @@ html.js [data-reveal]:not(.is-in) { opacity: 0; }
   .hero { min-height: 100svh; padding-top: 5rem; padding-bottom: var(--s-5); }
   .hero__statement { display: none; }
   .hero__scroll { display: none; }
-  .hero__name { font-size: clamp(1.75rem, 5.8vw, 2.75rem); }
+  .hero__name { font-size: clamp(1.5rem, 5.2vw, 2.5rem); }
   .plate--hero { display: none; }
 }
 

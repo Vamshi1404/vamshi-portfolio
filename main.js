@@ -96,12 +96,9 @@ function stagger(nodes, start = 0) {
   nodes.forEach((n, i) => n.style.setProperty("--i", String(start + i)));
 }
 
-/** Tag an element (and its direct children) for the reveal observer. */
-function reveal(node, mode) {
-  if (!node) return node;
-  if (mode) node.setAttribute("data-reveal", mode);
-  else if (!node.hasAttribute("data-reveal"))
-    node.setAttribute("data-reveal", "");
+/* Static build: reveal is a no-op. Content is visible by default via CSS,
+   so nothing can ever be stranded invisible by an enhancement layer. */
+function reveal(node) {
   return node;
 }
 
@@ -202,14 +199,6 @@ function renderHero() {
     });
   }
 
-  // The scroll cue already exists in the markup. Appending it here as well
-  // rendered "Scroll to plot" twice, so only fill it in when it is missing
-  // (which is the case if the markup is ever simplified).
-  const scrollCue = q(".hero__scroll");
-  if (scrollCue && !scrollCue.textContent.trim()) {
-    scrollCue.appendChild(el("span", "hero__scroll-tick"));
-    scrollCue.appendChild(document.createTextNode("Scroll to plot"));
-  }
 }
 
 /* --- section header helper --------------------------------------------- */
@@ -291,59 +280,44 @@ function renderWork() {
   });
 }
 
+/* Projects render as click-to-expand rows: year + title always visible,
+   description, bullets, stack and link open in place on click. */
 function buildProject(p, i) {
-  const frame = el("article", [
-    "plateframe",
-    p.flagship ? "plateframe--flagship" : "",
-  ]);
+  const frame = el("details", ["fold", "fold--project"]);
   frame.id = `project-${p.id}`;
-  reveal(frame);
 
-  /* --- head: identity + description + dense brief --- */
-  const head = el("div", "pf__head");
-  const meta = el("p", "pf__meta");
-  meta.appendChild(el("span", "marker"));
+  const head = el("summary", "fold__head");
+  const titles = el("span", "fold__titles");
+  const meta = el("span", "fold__meta");
   meta.appendChild(el("span", null, p.year));
   if (p.flagship) meta.appendChild(el("span", null, "Flagship"));
-  head.appendChild(meta);
-  head.appendChild(el("h3", "pf__title", p.title));
-  const sub = el("p", "pf__sub", p.subtitle);
-  head.appendChild(sub);
-  head.appendChild(el("p", "pf__desc", p.description));
+  titles.appendChild(meta);
+  titles.appendChild(el("span", "fold__title", p.title));
+  head.appendChild(titles);
+  head.appendChild(el("span", "fold__sign", "+"));
+  frame.appendChild(head);
+
+  const body = el("div", "fold__body");
+  body.appendChild(el("p", "pf__desc", p.description));
   /* Short precise bullets. Only rendered from content.js — no invented copy. */
   if (p.points?.length) {
     const ul = el("ul", "pf__points");
     p.points.forEach((t) => ul.appendChild(el("li", null, t)));
-    head.appendChild(ul);
+    body.appendChild(ul);
   }
-  frame.appendChild(head);
-
-  /* --- aside: link + stack --- */
-  const aside = el("div", "pf__aside");
-
   const link = el("a", "pf__link", p.linkLabel);
   link.href = p.repo;
   link.target = "_blank";
   link.rel = "noopener noreferrer";
-  link.dataset.cursor = "SOURCE";
   link.setAttribute(
     "aria-label",
     `${p.linkLabel}, ${p.title} repository (opens in a new tab)`,
   );
-  aside.appendChild(link);
-
-  const stackWrap = el("div");
-  stackWrap.appendChild(el("p", "pf__meta", "Stack"));
+  body.appendChild(link);
   const chips = el("div", "chips");
   p.stack.forEach((s) => chips.appendChild(el("span", "chip", s)));
-  stackWrap.appendChild(chips);
-  aside.appendChild(stackWrap);
-  frame.appendChild(aside);
-
-  /* Diagrams, fact tiles, highlight lists and plate captions were removed:
-     each project is now title + description + Problem/System/Approach/Result
-     brief + link + stack only. All of that information lives in the brief
-     above, so nothing below would add information — only decoration. */
+  body.appendChild(chips);
+  frame.appendChild(body);
 
   return frame;
 }
@@ -365,200 +339,49 @@ function renderOpenSource() {
   oss.appendChild(lede);
 
   DATA.openSource.contributions.forEach((c) => {
-    const card = el("article", "osscard");
-    reveal(card);
+    const card = el("details", ["fold", "fold--oss"]);
 
-    const head = el("div", "osscard__head");
-    const stamp = el("p", "osscard__stamp");
-    stamp.appendChild(el("span", "marker"));
-    stamp.appendChild(document.createTextNode(c.role));
-    head.appendChild(stamp);
-    head.appendChild(el("h3", "osscard__title", c.project));
-    head.appendChild(el("p", "osscard__summary", c.summary));
-    head.appendChild(el("p", "osscard__note", c.roleNote));
-    const link = el("a", "pf__link", c.linkLabel);
-    link.href = c.repo;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.dataset.cursor = "SOURCE";
-    link.setAttribute(
-      "aria-label",
-      `${c.linkLabel}, ${c.project} repository (opens in a new tab)`,
-    );
-    head.appendChild(link);
+    const head = el("summary", "fold__head");
+    const titles = el("span", "fold__titles");
+    titles.appendChild(el("span", "fold__meta", c.role));
+    titles.appendChild(el("span", "fold__title", c.project));
+    head.appendChild(titles);
+    head.appendChild(el("span", "fold__sign", "+"));
     card.appendChild(head);
 
-    const body = el("div", "osscard__body");
+    const body = el("div", "fold__body");
+    body.appendChild(el("p", "osscard__summary", c.summary));
+    body.appendChild(el("p", "osscard__note", c.roleNote));
 
-    /* instrument readouts */
-    const inst = el("dl", "instruments");
-    c.metrics.forEach((m, i) => {
-      const cell = el("div", "plate__cell");
-      cell.appendChild(el("dt", "plate__k", m.label));
-      const dd = el("dd", "plate__v");
-      // Count-up target lives in a data attribute; initCounters animates the
-      // text. Under reduced motion the resting value is the real figure, so
-      // the number is never briefly a misleading zero.
-      dd.dataset.count = String(m.value);
-      dd.dataset.prefix = m.prefix || "";
-      dd.dataset.suffix = m.suffix || "";
-      dd.textContent = `${m.prefix || ""}${reduced ? m.value : 0}${m.suffix || ""}`;
-      cell.appendChild(dd);
-      cell.style.setProperty("--i", String(i));
-      inst.appendChild(cell);
+    /* plain metric lines: label and figure, no animated instruments */
+    const inst = el("ul", "fold__metrics");
+    c.metrics.forEach((m) => {
+      inst.appendChild(
+        el("li", null, `${m.label}: ${m.prefix || ""}${m.value}${m.suffix || ""}`),
+      );
     });
     body.appendChild(inst);
-
-    /* router diagram */
-    body.appendChild(buildRouter(c.routing));
 
     /* additional work */
     const listEl = el("ul", "hlist");
     c.highlights.forEach((h) => listEl.appendChild(el("li", null, h)));
     body.appendChild(listEl);
 
+    const link = el("a", "pf__link", c.linkLabel);
+    link.href = c.repo;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.setAttribute(
+      "aria-label",
+      `${c.linkLabel}, ${c.project} repository (opens in a new tab)`,
+    );
+    body.appendChild(link);
+
     card.appendChild(body);
     oss.appendChild(card);
   });
 
   list.appendChild(oss);
-}
-
-/** Two model tiers, a router, and the fallback path.
-    Geometry is explicit and collision-free: each box reserves a 34-unit band
-    with the tick on one line and the label on the next, and the complexity
-    axis label lives in a left gutter rotated away from every wire and box. */
-function buildRouter(r) {
-  const wrap = el("div", "router");
-  wrap.setAttribute("data-reveal", "");
-
-  const s = svg("svg", {
-    class: "router__fig",
-    viewBox: "0 0 340 150",
-    role: "img",
-    "aria-label": `Routing diagram: a router labelled ${r.routerLabel} selects between ${r.tiers
-      .map((t) => t.label)
-      .join(" and ")}, with ${r.fallbackNote.toLowerCase()}.`,
-  });
-
-  // Box bands. TICK_Y/LABEL_Y keep a 15-unit baseline gap inside a 34-unit
-  // box, so the two lines of type never touch.
-  const BW = 78,
-    BH = 34;
-  const TICK_Y = 13,
-    LABEL_Y = 28;
-  const tierX = 246,
-    tierY = [10, 106];
-  const routerX = 134,
-    routerY = 58;
-  const axisX = 13; // left gutter, clear of the input wire
-  const wireX0 = 24; // input wire starts right of the gutter
-
-  // A box is one rect, one signal edge, a tick and a label.
-  const box = (x, y, opts) => {
-    s.appendChild(
-      svg("rect", {
-        class: `r-box${opts.router ? " r-box--router" : ""}`,
-        x,
-        y,
-        width: BW,
-        height: BH,
-        rx: 0,
-      }),
-    );
-    s.appendChild(
-      svg("rect", { class: "r-box r-box--edge", x, y, width: 2, height: BH }),
-    );
-    const tick = svg("text", { class: "r-tick", x: x + 8, y: y + TICK_Y });
-    tick.textContent = opts.tick;
-    if (opts.tickInk) tick.setAttribute("fill", "var(--signal-ink)");
-    s.appendChild(tick);
-    const label = svg("text", { class: "r-label", x: x + 8, y: y + LABEL_Y });
-    label.textContent = opts.label;
-    s.appendChild(label);
-  };
-
-  r.tiers.forEach((t, i) => {
-    box(tierX, tierY[i], {
-      tick: `TIER ${String.fromCharCode(65 + i)}`,
-      label: t.label.replace(/^Configured model tier /, "Model tier "),
-    });
-  });
-
-  box(routerX, routerY, {
-    tick: "OPT-IN",
-    label: r.routerLabel,
-    router: true,
-    tickInk: true,
-  });
-
-  // Live wires: router → each tier
-  tierY.forEach((y) => {
-    const y0 = routerY + BH / 2;
-    const y1 = y + BH / 2;
-    const x0 = routerX + BW;
-    const x1 = tierX;
-    const mx = (x0 + x1) / 2;
-    s.appendChild(
-      svg("path", {
-        class: "r-wire r-wire--live",
-        d: `M${x0} ${y0} C ${mx} ${y0}, ${mx} ${y1}, ${x1} ${y1}`,
-      }),
-    );
-  });
-
-  // Fallback: tier A → tier B, dashed, routed clear around the right.
-  s.appendChild(
-    svg("path", {
-      class: "r-wire r-wire--fallback",
-      d: `M${tierX + BW} ${tierY[0] + BH} C ${tierX + BW + 24} ${tierY[0] + BH}, ${tierX + BW + 24} ${tierY[1]}, ${tierX + BW} ${tierY[1] + BH / 2}`,
-    }),
-  );
-
-  // Input wire, and its tick set above the wire rather than beside it.
-  const midY = routerY + BH / 2;
-  s.appendChild(
-    svg("path", {
-      class: "r-wire",
-      d: `M${wireX0} ${midY} L ${routerX} ${midY}`,
-    }),
-  );
-  const inTick = svg("text", { class: "r-tick", x: wireX0, y: midY - 8 });
-  inTick.textContent = "LLM INVOCATION";
-  s.appendChild(inTick);
-
-  // The complexity axis label lives in the left gutter, rotated, so it can
-  // never sit on a wire or inside a box. It previously ran straight through
-  // the router's own label.
-  const band = svg("text", {
-    class: "r-axis",
-    x: axisX,
-    y: 75,
-    "text-anchor": "middle",
-    transform: "rotate(-90 13 75)",
-  });
-  band.textContent = "TASK COMPLEXITY";
-  s.appendChild(band);
-
-  // The figure is authored in a 320-unit coordinate space, so its type scales
-  // with the box. The wrapper caps the width to keep that scale — and the
-  // resulting type size — constant once the card gets the full measure.
-  const draw = el("div", "router__draw");
-  draw.appendChild(s);
-  wrap.appendChild(draw);
-
-  const note = el("p", "router__note");
-  const a = el("span");
-  a.appendChild(el("i"));
-  a.appendChild(document.createTextNode(r.routerNote));
-  const b = el("span");
-  b.appendChild(el("i", "fb"));
-  b.appendChild(document.createTextNode(r.fallbackNote));
-  note.appendChild(a);
-  note.appendChild(b);
-  wrap.appendChild(note);
-
-  return wrap;
 }
 
 /* --- 05 THE STACK ------------------------------------------------------ */
@@ -574,44 +397,28 @@ function renderToolkit() {
   if (!stack) return;
 
   DATA.toolkit.groups.forEach((g, i) => {
-    const panelId = `stratum-panel-${g.index}`;
-    const stratum = el("div", "stratum");
-    stratum.dataset.stratum = g.index;
+    const stratum = el("details", ["fold", "fold--stratum"]);
 
-    const btn = el("button", "stratum__btn");
-    btn.type = "button";
-    btn.id = `stratum-btn-${g.index}`;
-    btn.setAttribute("aria-expanded", "true");
-    btn.setAttribute("aria-controls", panelId);
-    btn.dataset.cursor = "OPEN";
-
-    btn.appendChild(el("span", "stratum__idx", g.index));
-    const nameWrap = el("span", "stratum__namewrap");
-    nameWrap.appendChild(el("span", "stratum__name", g.name));
-    nameWrap.appendChild(el("span", "stratum__note", g.note));
+    const btn = el("summary", "fold__head");
+    btn.appendChild(el("span", "fold__meta", g.index));
+    const nameWrap = el("span", "fold__titles");
+    nameWrap.appendChild(el("span", "fold__title", g.name));
+    nameWrap.appendChild(el("span", "fold__sub", g.note));
     btn.appendChild(nameWrap);
-    const count = el("span", "stratum__count");
+    const count = el("span", "fold__count");
     count.appendChild(
       el("span", null, String(g.items.length).padStart(2, "0")),
     );
-    count.appendChild(el("span", "stratum__sign"));
+    count.appendChild(el("span", "fold__sign", "+"));
     btn.appendChild(count);
     stratum.appendChild(btn);
 
-    const panel = el("div", "stratum__panel");
-    panel.id = panelId;
-    panel.dataset.open = "true";
-    panel.setAttribute("role", "region");
-    panel.setAttribute("aria-labelledby", btn.id);
-    const inner = el("div", "stratum__inner");
+    const panel = el("div", "fold__body");
     const list = el("ul", "stratum__list");
     g.items.forEach((item, k) => {
-      const li = el("li", "stratum__item", item);
-      li.style.setProperty("--i", String(k));
-      list.appendChild(li);
+      list.appendChild(el("li", "stratum__item", item));
     });
-    inner.appendChild(list);
-    panel.appendChild(inner);
+    panel.appendChild(list);
     stratum.appendChild(panel);
 
     stack.appendChild(stratum);
@@ -631,16 +438,20 @@ function renderRecord() {
   DATA.record.entries.forEach((e, i) => {
     const item = el("li", "ledger__item");
     if (e.featured) item.dataset.featured = "true";
-    reveal(item, "left");
-    item.style.setProperty("--i", String(i));
 
-    const aside = el("div", "ledger__aside");
-    aside.appendChild(el("p", "ledger__kind", e.kind));
-    aside.appendChild(el("p", "ledger__period", e.period));
-    item.appendChild(aside);
+    const fold = el("details", "fold");
+    const head = el("summary", "fold__head");
+    const titles = el("span", "fold__titles");
+    const meta = el("span", "fold__meta");
+    meta.appendChild(el("span", null, e.kind));
+    meta.appendChild(el("span", null, e.period));
+    titles.appendChild(meta);
+    titles.appendChild(el("span", "fold__title", e.title));
+    head.appendChild(titles);
+    head.appendChild(el("span", "fold__sign", "+"));
+    fold.appendChild(head);
 
-    const main = el("div", "ledger__main");
-    main.appendChild(el("h3", "ledger__title", e.title));
+    const main = el("div", "fold__body");
     main.appendChild(el("p", "ledger__org", e.org));
     main.appendChild(el("p", "ledger__detail", e.detail));
 
@@ -669,7 +480,6 @@ function renderRecord() {
       a.href = e.link;
       a.target = "_blank";
       a.rel = "noopener noreferrer";
-      a.dataset.cursor = "SOURCE";
       a.setAttribute(
         "aria-label",
         `${e.linkLabel}, ${e.title} (opens in a new tab)`,
@@ -677,7 +487,8 @@ function renderRecord() {
       main.appendChild(a);
     }
 
-    item.appendChild(main);
+    fold.appendChild(main);
+    item.appendChild(fold);
     list.appendChild(item);
   });
 }
@@ -846,10 +657,6 @@ function renderBeyond() {
       body.appendChild(p);
     });
   }
-
-  /* Art is static markup: reveal it, never mount (mount clears content). */
-  const art = document.querySelector("[data-beyond-art]");
-  if (art) reveal(art);
 
   const quote = mount("[data-quote]");
   if (quote) {
@@ -1960,23 +1767,12 @@ function boot() {
     renderFooter();
     buildConvergence();
 
-    initReveal();
+    /* Clean static build: content renders fully visible with no motion
+       systems. initScrollState keeps the nav spy and masthead state.
+       Terrain, counters, cursor, magnetics, the anime layer and the
+       framer island are never started, so the page has zero CDN
+       dependencies and renders identically everywhere. */
     initScrollState();
-    initStrata();
-    initPointerTracking();
-
-    // The terrain and the motion libraries are all deferred past first paint
-    // so they can never delay LCP.
-    const afterPaint = () => {
-      initTerrain();
-      // Counters need the tween engine, so load it once and share it.
-      loadAnime().then((lib) => initCounters(lib));
-      initAnimeLayer();
-      initFramerIsland();
-    };
-    if ("requestIdleCallback" in window)
-      requestIdleCallback(afterPaint, { timeout: 1200 });
-    else setTimeout(afterPaint, 260);
   } catch (err) {
     // A throw here still leaves everything that was rendered before it intact,
     // so force the reveal system open rather than stranding it.

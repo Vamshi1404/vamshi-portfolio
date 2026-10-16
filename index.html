@@ -21,7 +21,6 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://esm.sh" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="styles.css">
 <script>
@@ -128,14 +127,13 @@
      ================================================================== -->
 <header class="masthead" id="masthead">
   <div class="masthead__inner">
-    <a class="wordmark" href="#top" data-cursor="TOP" aria-label="Back to top">
+    <a class="wordmark" href="#top" aria-label="Back to top">
       <!-- Filled from content.js at runtime. Deliberately empty here so no
            personal detail is hardcoded in this file. -->
       <span class="wordmark__text" data-wordmark></span>
     </a>
     <nav class="nav" id="nav" aria-label="Section navigation" data-nav></nav>
-  </div>
-  <div class="masthead__progress" aria-hidden="true"><i data-progress></i></div>
+    </div>
 </header>
 
 <div class="spine" aria-hidden="true">
@@ -156,32 +154,9 @@
 
   <!-- ====================================================================
        01 — HERO
-       The typographic layer is server-free HTML rendered from content.js and
-       paints immediately. The Three.js contour terrain mounts behind it after
-       first paint. A static SVG contour plate sits underneath as the fallback
-       if WebGL is unavailable or motion is reduced.
+       Plain type on clean paper. No canvas, no terrain, no decoration.
        ================================================================== -->
   <section class="hero" id="top" aria-labelledby="hero-heading">
-    <div class="hero__terrain" data-terrain aria-hidden="true">
-      <canvas data-terrain-canvas></canvas>
-      <svg class="hero__fallback" data-terrain-fallback viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" focusable="false">
-        <g fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke">
-          <path d="M-20 380 C 120 300, 180 420, 300 350 S 520 250, 640 330 820 300 860 300" />
-          <path d="M-20 340 C 120 260, 180 380, 300 310 S 520 210, 640 290 820 260 860 260" />
-          <path d="M-20 300 C 120 220, 180 340, 300 270 S 520 170, 640 250 820 220 860 220" />
-          <path d="M-20 260 C 120 180, 180 300, 300 230 S 520 130, 640 210 820 180 860 180" />
-          <path d="M-20 220 C 120 140, 180 260, 300 190 S 520 90, 640 170 820 140 860 140" />
-          <path d="M-20 180 C 120 100, 180 220, 300 150 S 520 50, 640 130 820 100 860 100" />
-          <path d="M-20 420 C 120 340, 180 460, 300 390 S 520 290, 640 370 820 340 860 340" />
-          <path d="M-20 460 C 120 380, 180 500, 300 430 S 520 330, 640 410 820 380 860 380" />
-        </g>
-        <g class="hero__fallback-marker">
-          <path d="M420 250h22M431 239v22" stroke="currentColor" stroke-width="1.4" fill="none" />
-          <circle cx="431" cy="250" r="3" fill="currentColor" />
-        </g>
-      </svg>
-    </div>
-
     <div class="hero__grid">
       <p class="hero__eyebrow mono" data-hero-eyebrow></p>
 
@@ -192,16 +167,11 @@
       <p class="hero__statement" data-hero-statement></p>
 
       <div class="hero__actions">
-        <a class="btn btn--primary" href="#work" data-magnetic data-cursor="SEE WORK">Selected work</a>
-        <a class="btn btn--ghost" href="#contact" data-magnetic data-cursor="CONTACT">Get in touch</a>
+        <a class="btn btn--primary" href="#work">Selected work</a>
+        <a class="btn btn--ghost" href="#contact">Get in touch</a>
       </div>
 
       <dl class="plate plate--hero" data-hero-readouts aria-label="Key facts"></dl>
-
-      <p class="hero__scroll mono" aria-hidden="true">
-        <span class="hero__scroll-tick"></span>
-        Scroll to plot
-      </p>
     </div>
   </section>
 
@@ -337,7 +307,7 @@
         <p class="resume__lede" data-resume-lede></p>
 
         <div class="resume__actions">
-          <a class="btn btn--primary" href="#" data-resume-download data-magnetic data-cursor="PDF"></a>
+          <a class="btn btn--primary" href="#" data-resume-download></a>
           <p class="resume__note mono" data-resume-note></p>
         </div>
 
@@ -359,67 +329,9 @@
         <p class="sec-head__note mono" data-sec-note></p>
       </div>
 
-      <div class="beyond__split">
-        <div class="beyond">
-          <p class="beyond__lede display" data-beyond-lede></p>
-          <div class="beyond__prose" data-beyond-body></div>
-        </div>
-
-        <!-- Doodle art: hand-drawn line work only. Spinning globe, GPU
-             outline. Theme inks plus the vermilion accent. No fills. -->
-        <aside class="beyond__art" data-beyond-art aria-hidden="true">
-          <svg class="doodle doodle--globe" viewBox="0 0 200 200" focusable="false">
-            <ellipse cx="100" cy="100" rx="88" ry="30" transform="rotate(-24 100 100)" class="d-ink2 d-dash"/>
-            <circle cx="180" cy="64" r="3.5" class="d-fill-sig"/>
-            <circle cx="100" cy="100" r="70" class="d-ink"/>
-            <line x1="30" y1="100" x2="170" y2="100" class="d-ink"/>
-            <ellipse cx="100" cy="74" rx="50" ry="13" class="d-ink2 d-dash"/>
-            <ellipse cx="100" cy="126" rx="50" ry="13" class="d-ink2 d-dash"/>
-            <ellipse cx="100" cy="100" rx="64" ry="66" class="d-ink spin spin--a"/>
-            <ellipse cx="100" cy="100" rx="36" ry="66" class="d-sig spin spin--b"/>
-            <ellipse cx="100" cy="100" rx="12" ry="66" class="d-ink2 spin spin--c"/>
-            <path d="M162 52 h12 M168 46 v12" class="d-ink2"/>
-            <path d="M27 150 h10 M32 145 v10" class="d-sig"/>
-          </svg>
-
-          <svg class="doodle doodle--gpu" viewBox="0 0 240 200" focusable="false">
-            <path d="M196 30 C 210 18, 222 22, 228 10" class="d-sig"/>
-            <rect x="184" y="28" width="26" height="14" rx="2" class="d-ink"/>
-            <rect x="34" y="52" width="172" height="104" rx="8" class="d-ink"/>
-            <rect x="20" y="62" width="14" height="84" rx="2" class="d-ink2"/>
-            <rect x="23" y="72" width="8" height="12" class="d-ink2"/>
-            <rect x="23" y="90" width="8" height="12" class="d-ink2"/>
-            <g transform="translate(92,104)">
-              <circle r="30" class="d-ink"/>
-              <g class="fan fan--a">
-                <circle r="26" fill="none" stroke="none"/>
-                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2"/>
-                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2" transform="rotate(72)"/>
-                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2" transform="rotate(144)"/>
-                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2" transform="rotate(216)"/>
-                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2" transform="rotate(288)"/>
-              </g>
-              <circle r="5.5" class="d-sig"/>
-            </g>
-            <g transform="translate(160,104)">
-              <circle r="30" class="d-ink"/>
-              <g class="fan fan--b">
-                <circle r="26" fill="none" stroke="none"/>
-                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2"/>
-                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2" transform="rotate(72)"/>
-                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2" transform="rotate(144)"/>
-                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2" transform="rotate(216)"/>
-                <path d="M0,-5 Q10,-13 6,-25" class="d-ink2" transform="rotate(288)"/>
-              </g>
-              <circle r="5.5" class="d-sig"/>
-            </g>
-            <rect x="70" y="156" width="56" height="14" class="d-ink2"/>
-            <line x1="84" y1="156" x2="84" y2="170" class="d-ink2"/>
-            <rect x="44" y="132" width="12" height="12" class="d-ink2"/>
-            <rect x="182" y="132" width="12" height="12" class="d-sig"/>
-            <path d="M217 118 h10 M222 113 v10" class="d-ink2"/>
-          </svg>
-        </aside>
+      <div class="beyond">
+        <p class="beyond__lede display" data-beyond-lede></p>
+        <div class="beyond__prose" data-beyond-body></div>
       </div>
     </div>
   </section>
@@ -444,7 +356,7 @@
           <p class="contact__lede" data-contact-lede></p>
 
           <div class="contact__cta">
-            <a class="btn btn--primary btn--lg" href="#" data-contact-cta data-magnetic data-cursor="EMAIL"></a>
+            <a class="btn btn--primary btn--lg" href="#" data-contact-cta></a>
             <p class="contact__ctanote mono" data-contact-ctanote></p>
           </div>
 
@@ -478,7 +390,7 @@
         <p class="mono colophon__colophon" data-footer-colophon></p>
       </div>
       <div class="colophon__top">
-        <a class="totop" href="#top" data-cursor="TOP" data-footer-totop></a>
+        <a class="totop" href="#top" data-footer-totop></a>
       </div>
     </div>
   </div>
@@ -493,25 +405,9 @@
   </div>
 </noscript>
 
-<!-- Static SVG favicon: the contour mark from the wordmark. -->
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://esm.sh/three@0.169.0",
-    "animejs": "https://esm.sh/animejs@3.2.2",
-    "react": "https://esm.sh/react@18.3.1",
-    "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
-    "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
-    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
-    "framer-motion": "https://esm.sh/framer-motion@11.11.17?external=react",
-    "htm": "https://esm.sh/htm@3.1.1"
-  }
-}
-</script>
-
 <!-- content.js first: it is plain data with no dependencies. -->
 <script src="content.js"></script>
-<!-- main.js is a module: everything else is loaded through the import map. -->
+<!-- main.js is a module with no external dependencies: fully self-contained. -->
 <script type="module" src="main.js"></script>
 
 </body>

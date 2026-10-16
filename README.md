@@ -1,14 +1,14 @@
 # Borra Vamshi Thirumal Reddy — Technical Portfolio
 
-An **Awwwards-tier**, high-craft technical portfolio built as an **editorial survey chart**: hairline rules, plotted readouts, plotter pen micro-interactions, interactive architecture diagrams, and a signature **procedural 3D contour mountain terrain** powered by Three.js.
+A clean, minimal, fully static portfolio: plain type on paper, hairline section rules, and click-to-expand rows for projects, toolkit, record, and open source. No animations, no diagrams, no canvas.
 
-Designed with a **zero-build-step architecture** — pure HTML5, modern Vanilla CSS, and ES Modules loaded via import maps. No bundlers, no build pipeline, and no runtime dependencies to install. It runs directly on any static host, including GitHub Pages, Cloudflare Pages, or Vercel.
+Designed with a **zero-build-step, zero-dependency architecture** — pure HTML5, Vanilla CSS, and a dependency-free ES module. No bundlers, no build pipeline, no CDN calls, nothing to install. It runs identically on any static host, including GitHub Pages, Cloudflare Pages, or Vercel.
 
 ---
 
 ## ⚡ Quick Start (Run Locally)
 
-Because the project uses browser-native **ES Modules** and **Import Maps**, modern browsers require it to be served over HTTP (opening directly via `file://` is blocked by browser CORS security policies).
+Because the project uses a browser-native **ES Module**, modern browsers require it to be served over HTTP (opening directly via `file://` is blocked by browser CORS security policies).
 
 ### Option 1: Python (Recommended — Pre-installed on most systems)
 
@@ -45,7 +45,7 @@ vamshi-portfolio/
 │                     # Contains all personal info, projects, skills, and links
 ├── index.html        # Semantic HTML5 shell, layout landmarks, and fallback plates
 ├── styles.css        # Design system: OKLCH tokens, editorial grid, responsive rules
-├── main.js           # Behaviour & rendering layers: Three.js terrain, scroll spy, diagrams
+├── main.js           # Rendering: static content, scroll spy, print-to-PDF resume
 ├── assets/
 │   └── favicon.svg   # Custom contour mark favicon
 └── README.md         # Documentation & guide
@@ -56,7 +56,7 @@ vamshi-portfolio/
 | **`content.js`** | **All text, projects, numbers, and links.** Modifying this updates the entire site without touching HTML or CSS. | **Yes — Primary file** |
 | **`index.html`** | Semantic page shell and structural markup. Contains zero hardcoded personal data. | Only to add new sections |
 | **`styles.css`** | The entire visual system: OKLCH palette, typographic scales, layout grids, and animations. | Only for design styling changes |
-| **`main.js`** | Isolated execution layers: 3D terrain canvas, scroll spy, disclosure accordions, and SVG diagrams. | Only for engine changes |
+| **`main.js`** | Rendering layers: static content, scroll spy, native click-to-expand rows. | Only for engine changes |
 
 ---
 
