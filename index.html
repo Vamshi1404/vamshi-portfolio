@@ -59,14 +59,21 @@
       p.textContent = detail;
       box.appendChild(p);
 
+      /* Advice depends on where the page runs: local filesystem openings
+         need a server; live deployments need their files side by side. */
+      var onFile = location.protocol === 'file:';
       var pre = document.createElement('pre');
       pre.className = 'bootnotice__cmd';
-      pre.textContent = 'cd vamshi-portfolio\npython -m http.server 8000';
+      pre.textContent = onFile
+        ? 'cd vamshi-portfolio\npython -m http.server 8000'
+        : 'index.html, content.js, main.js and styles.css\nmust sit side by side in the deployed folder.';
       box.appendChild(pre);
 
       var tail = document.createElement('p');
       tail.className = 'bootnotice__tail';
-      tail.textContent = 'then open http://localhost:8000';
+      tail.textContent = onFile
+        ? 'then open http://localhost:8000'
+        : 'On GitHub Pages this usually means the wrong publish folder was selected.';
       box.appendChild(tail);
 
       var mount = function () {
@@ -103,8 +110,8 @@
     setTimeout(function () {
       if (window.__PLOT_BOOTED) return;
       fail('The portfolio did not finish loading.',
-           'This usually means content.js or main.js could not be read. Serve the ' +
-           'folder over HTTP and reload:');
+           'This usually means content.js or main.js could not be read. ' +
+           'Check the deployed folder holds all four files, then reload:');
     }, 6000);
   })();
 </script>
