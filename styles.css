@@ -166,16 +166,8 @@ body {
   font-synthesis-weight: none;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  /* The plotter pen replaces the cursor on fine pointers only; touch keeps
-     the native cursor and native tap behaviour. */
+  /* Native cursor everywhere: the custom pen was removed. */
   overflow-x: hidden;
-}
-
-@media (pointer: fine) {
-  body.has-pen,
-  body.has-pen a,
-  body.has-pen button,
-  body.has-pen [data-cursor] { cursor: none; }
 }
 
 h1, h2, h3, h4 { margin: 0; font-weight: 400; }
@@ -390,15 +382,13 @@ a:hover { text-decoration-color: var(--signal); }
   white-space: pre;
   overflow-x: auto;
 }
-.bootnotice__tail { margin-top: var(--s-2); font-family: var(--font-mono); font-size: var(--t-caption); color: var(--ink-3); }
+.bootnotice__tail { margin-top: var(--s-2); font-family: var(--font-mono); font-size: var(--t-caption); color: var(--ink-2); }
 
 /* When boot fails, the reveal system must not be able to hide what did render.
    This is the single most important rule in the file: content is never allowed
    to stay invisible because an enhancement layer did not run. */
 html.boot-failed [data-reveal] { opacity: 1 !important; transform: none !important; }
 html.boot-failed .draw-path { stroke-dashoffset: 0 !important; }
-html.boot-failed .hero__terrain { display: none; }
-html.boot-failed .pen { display: none; }
 
 /* ==========================================================================
    04  CHROME
@@ -409,7 +399,7 @@ html.boot-failed .pen { display: none; }
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 90;
-  background: color-mix(in oklab, var(--paper) 86%, transparent);
+  background: color-mix(in oklab, var(--paper) 93%, transparent);
   backdrop-filter: blur(10px) saturate(1.1);
   -webkit-backdrop-filter: blur(10px) saturate(1.1);
   border-bottom: var(--hairline) solid transparent;
@@ -469,7 +459,7 @@ html.boot-failed .pen { display: none; }
 .nav__link i {
   font-style: normal;
   font-size: var(--t-micro);
-  color: var(--ink-3);
+  color: var(--ink-2);
   transform: translateY(-0.35em);
   transition: color var(--dur-1) var(--ease-swap);
 }
@@ -1416,13 +1406,9 @@ html.boot-failed .pen { display: none; }
   padding: 0.55rem 0.85rem;
   background: var(--paper-2);
   border: var(--hairline) solid var(--rule);
-  opacity: 0;
-  transform: translate3d(0, 8px, 0);
-  transition: opacity var(--dur-2) var(--ease-expo), transform var(--dur-2) var(--ease-expo),
-              border-color var(--dur-1) linear, color var(--dur-1) linear;
-  transition-delay: calc(var(--i, 0) * 34ms);
+  opacity: 1;
+  transition: border-color var(--dur-1) linear, color var(--dur-1) linear;
 }
-.stratum__panel[data-open="true"] .stratum__item { opacity: 1; transform: none; }
 .stratum__item:hover { border-color: var(--signal); color: var(--signal-ink); }
 
 /* ==========================================================================
@@ -1431,32 +1417,18 @@ html.boot-failed .pen { display: none; }
 .record { display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); }
 .record__headline { max-width: 28ch; font-size: var(--t-h2); margin: 0; }
 
+/* Record entries are fold rows now: the list item is a plain wrapper and
+   the fold carries all borders and spacing. The old timeline diamond is
+   gone with the two-column ledger. */
 .ledger {
   display: grid;
   gap: 0;
-  border-top: var(--hairline) solid var(--rule-strong);
-  counter-reset: entry;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
-.ledger__item {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
-  gap: var(--s-4) var(--gutter);
-  padding: var(--s-5) 0;
-  border-bottom: var(--hairline) solid var(--rule);
-}
-.ledger__item::before {
-  /* The plotted spine: a tick per entry, with the featured one marked. */
-  content: "";
-  position: absolute;
-  left: -1.25rem;
-  top: calc(var(--s-6) + 0.4rem);
-  width: 9px; height: 9px;
-  background: var(--paper);
-  border: var(--hairline) solid var(--rule-strong);
-  transform: rotate(45deg);
-}
-.ledger__item[data-featured="true"]::before { background: var(--signal); border-color: var(--signal); }
+.ledger__item { display: block; padding: 0; border: 0; }
+.ledger__item::before { content: none; }
 .ledger__aside { display: grid; gap: var(--s-2); align-content: start; }
 .ledger__kind {
   font-family: var(--font-mono);
@@ -1605,7 +1577,7 @@ html.boot-failed .pen { display: none; }
 }
 .crecord {
   display: grid;
-  grid-template-columns: minmax(5.5rem, 9rem) minmax(0, 1fr) auto;
+  grid-template-columns: minmax(5.5rem, 9rem) minmax(0, 1fr);
   gap: var(--s-3) var(--s-5);
   align-items: center;
   padding: var(--s-4) 0;
@@ -1639,7 +1611,7 @@ html.boot-failed .pen { display: none; }
   transition: color var(--dur-1) var(--ease-swap), background-size var(--dur-2) var(--ease-plot);
 }
 .crecord__v:hover { color: var(--signal-ink); background-size: 100% 2px; }
-.crecord__arrow { color: var(--ink-3); font-family: var(--font-mono); font-size: var(--t-small); }
+.crecord__arrow { color: var(--ink-2); font-family: var(--font-mono); font-size: var(--t-small); }
 .crecord__v:hover ~ .crecord__arrow { color: var(--signal); }
 
 /* ==========================================================================
@@ -1787,7 +1759,7 @@ html.boot-failed .pen { display: none; }
 .colophon__name { font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem); margin: 0; line-height: 1; }
 .colophon__role { color: var(--ink-2); }
 .colophon__meta { grid-column: 7 / span 5; display: grid; gap: var(--s-2); color: var(--ink-2); }
-.colophon__colophon { color: var(--ink-3); }
+.colophon__colophon { color: var(--ink-2); }
 .colophon__top { grid-column: 12 / span 1; justify-self: end; }
 .totop {
   display: inline-flex;
@@ -1873,7 +1845,10 @@ html.js [data-reveal]:not(.is-in) { opacity: 1; transform: none; }
 @media (max-width: 40rem) {
   :root { --gutter: 1.125rem; }
 
-  .masthead__inner { height: 3.75rem; }
+  /* Narrow screens: the header wraps to two rows so the full wordmark and
+     both nav links stay visible and tappable. Anchor offset grows to match. */
+  .masthead__inner { height: auto; min-height: 3.75rem; flex-wrap: wrap; row-gap: 0.15rem; padding-block: 0.5rem; }
+  html { scroll-padding-top: 7.5rem; }
 
   /* The nav becomes a horizontally scrollable strip. Still fully keyboard
      reachable, still real links, no hamburger, no hidden menu. */
@@ -1886,12 +1861,7 @@ html.js [data-reveal]:not(.is-in) { opacity: 1; transform: none; }
   }
   .nav::-webkit-scrollbar { display: none; }
 
-  .hero { min-height: 92svh; padding-top: 5.5rem; }
-  .hero__terrain {
-    background-size: 56px 56px;
-    mask-image: radial-gradient(120% 80% at 70% 34%, #000 24%, transparent 72%);
-    -webkit-mask-image: radial-gradient(120% 80% at 70% 34%, #000 24%, transparent 72%);
-  }
+  .hero { min-height: 0; padding-top: 6.5rem; }
   .hero__name { max-width: 100%; }
   .hero__statement { font-size: var(--t-body); }
   .hero__actions .btn { flex: 1 1 auto; justify-content: center; }

@@ -623,9 +623,9 @@ const portfolio = {
      --------------------------------------------------------------------- */
   footer: {
     /** Line under the wordmark. */
-    note: "Static. One file. No trackers.",
+    note: "Static. No trackers.",
     /** Small print line. */
-    colophon: "Instrument + Mono. Drawn with Three.js.",
+    colophon: "Instrument Serif, Sans and Mono.",
     /** Label for the back-to-top control. */
     backToTop: "Back to top",
   },

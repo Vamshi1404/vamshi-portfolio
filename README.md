@@ -138,7 +138,7 @@ The `toolkit.groups` array defines the disclosure accordion strata. Add, remove,
 This portfolio is built to reflect the highest standards of digital craftsmanship:
 * **Distinctive Typography**: Pairing editorial serif (*Instrument Serif*) with crisp contemporary grotesque (*Instrument Sans*) and monospace (*JetBrains Mono*).
 * **Harmonious OKLCH Palette**: Perceptually uniform colors configured with CSS custom properties. Rich neutral paper grounds (`#f5f2ec`) paired with deep ink tones and vibrant signal accents.
-* **3D Mountain Topography**: Procedural value-noise marching squares terrain rendered in Three.js with iso-contour lines and surveyor peak markers. Shifts gracefully and fades out on mobile/reduced-motion settings.
+* **Clean Static Hero**: Plain typographic hero on paper. No canvas, no animation libraries, no motion of any kind.
 * **Responsive Editorial Grid**: Handcrafted 12-column layout that naturally adapts from 4K ultrawide monitors down to compact smartphones without breaking typographic balance.
 * **Keyboard & Screen-Reader Accessible**: Real semantic elements (`<nav>`, `<main>`, `<section>`, `<dl>`), proper `aria-expanded` attributes, accessible SVGs, and focus rings.
 

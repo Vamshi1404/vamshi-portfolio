@@ -3,10 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Portfolio</title>
-<meta name="description" content="Loading portfolio.">
+<title>Borra Vamshi Thirumal Reddy · AI/ML, Data Systems, LLM Engineering</title>
+<meta name="description" content="Portfolio of Borra Vamshi Thirumal Reddy. Builds AI/ML systems, data-intensive applications and LLM infrastructure: NL-to-SQL analytics, verification pipelines, repo intelligence, plus open-source work.">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#f5f2ec">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://vamshi1404.github.io/vamshi-portfolio/">
+<meta property="og:title" content="Borra Vamshi Thirumal Reddy · AI/ML, Data Systems, LLM Engineering">
+<meta property="og:description" content="Portfolio of Borra Vamshi Thirumal Reddy. Builds AI/ML systems, data-intensive applications and LLM infrastructure.">
+<meta property="og:image" content="https://vamshi1404.github.io/vamshi-portfolio/assets/favicon.svg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Borra Vamshi Thirumal Reddy · AI/ML, Data Systems, LLM Engineering">
+<meta name="twitter:description" content="Portfolio of Borra Vamshi Thirumal Reddy. Builds AI/ML systems, data-intensive applications and LLM infrastructure.">
 <!--
   index.html contains STRUCTURE ONLY.
 
@@ -18,11 +26,11 @@
   This is a static, build-free site: it runs from GitHub Pages, from a local
   file server, or from any plain HTTP host. No backend, no API, no env vars.
 -->
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon.svg?v=2" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=2">
 <script>
   /* Set before first paint so reveal elements start in their hidden state and
      no content ever flashes in and out. The `html:not(.js)` rules in
@@ -127,7 +135,7 @@
      ================================================================== -->
 <header class="masthead" id="masthead">
   <div class="masthead__inner">
-    <a class="wordmark" href="#top" aria-label="Back to top">
+    <a class="wordmark" href="#top">
       <!-- Filled from content.js at runtime. Deliberately empty here so no
            personal detail is hardcoded in this file. -->
       <span class="wordmark__text" data-wordmark></span>
@@ -138,16 +146,6 @@
 
 <div class="spine" aria-hidden="true">
   <span class="spine__ticks"></span>
-</div>
-
-<!-- Custom cursor. Desktop + fine pointer only, never on touch. -->
-<div class="pen" data-pen aria-hidden="true">
-  <svg class="pen__cross" viewBox="0 0 40 40" focusable="false">
-    <path d="M20 4v9M20 27v9M4 20h9M27 20h9" />
-    <circle cx="20" cy="20" r="1.6" class="pen__dot" />
-  </svg>
-  <span class="pen__label" data-pen-label></span>
-  <span class="pen__coords" data-pen-coords>0.000 0.000</span>
 </div>
 
 <main id="main">
@@ -402,13 +400,17 @@
     <p>Please enable JavaScript to read it. No content is hardcoded into this
       file &mdash; every detail lives in <code>content.js</code>, so it stays
       accurate as the portfolio is updated.</p>
+    <p>Reach Borra Vamshi Thirumal Reddy directly:
+      <a href="mailto:vamshithirumal787@gmail.com">vamshithirumal787@gmail.com</a> ·
+      <a href="https://github.com/Vamshi1404">GitHub</a> ·
+      <a href="https://www.linkedin.com/in/vamshi-thirumal-reddy">LinkedIn</a></p>
   </div>
 </noscript>
 
 <!-- content.js first: it is plain data with no dependencies. -->
-<script src="content.js"></script>
+<script src="content.js?v=2"></script>
 <!-- main.js is a module with no external dependencies: fully self-contained. -->
-<script type="module" src="main.js"></script>
+<script type="module" src="main.js?v=2"></script>
 
 </body>
 </html>
