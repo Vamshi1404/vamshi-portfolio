@@ -626,8 +626,6 @@ const portfolio = {
     note: "Static. No trackers.",
     /** Small print line. */
     colophon: "Instrument Serif, Sans and Mono.",
-    /** Label for the back-to-top control. */
-    backToTop: "Back to top",
   },
 };
 

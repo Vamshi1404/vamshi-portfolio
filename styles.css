@@ -1693,6 +1693,9 @@ html.boot-failed .draw-path { stroke-dashoffset: 0 !important; }
 .fold__head::-webkit-details-marker { display: none; }
 .fold__head::marker { content: ""; }
 .fold__head:hover .fold__title { color: var(--signal-ink); }
+/* Static (always-open) folds are not interactive: no pointer, no hover. */
+.fold--static .fold__head { cursor: default; }
+.fold--static .fold__head:hover .fold__title { color: inherit; }
 .fold__titles { display: grid; gap: var(--s-1); min-width: 0; }
 .fold__meta {
   display: flex;
@@ -1758,25 +1761,8 @@ html.boot-failed .draw-path { stroke-dashoffset: 0 !important; }
 .colophon__brand { grid-column: 1 / span 5; display: grid; gap: var(--s-2); }
 .colophon__name { font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem); margin: 0; line-height: 1; }
 .colophon__role { color: var(--ink-2); }
-.colophon__meta { grid-column: 7 / span 5; display: grid; gap: var(--s-2); color: var(--ink-2); }
+.colophon__meta { grid-column: 7 / -1; display: grid; gap: var(--s-2); color: var(--ink-2); }
 .colophon__colophon { color: var(--ink-2); }
-.colophon__top { grid-column: 12 / span 1; justify-self: end; }
-.totop {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--s-2);
-  min-height: 44px;
-  font-family: var(--font-mono);
-  font-size: var(--t-micro);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-2);
-  text-decoration: none;
-  writing-mode: vertical-rl;
-  transition: color var(--dur-1) linear;
-}
-.totop::after { content: "↑"; color: var(--signal); }
-.totop:hover { color: var(--ink); }
 
 /* ==========================================================================
    14  BOOT / FALLBACK SAFETY
@@ -1818,8 +1804,6 @@ html.js [data-reveal]:not(.is-in) { opacity: 1; transform: none; }
 
   .colophon__brand { grid-column: 1 / span 6; }
   .colophon__meta { grid-column: 7 / -1; }
-  .colophon__top { grid-column: 1 / -1; justify-self: start; }
-  .totop { writing-mode: horizontal-tb; }
 }
 
 @media (max-width: 56rem) {
@@ -1983,7 +1967,7 @@ html.js [data-reveal]:not(.is-in) { opacity: 1; transform: none; }
    17  PRINT — a chart should print like a chart.
    ========================================================================== */
 @media print {
-  .masthead, .spine, .pen, .hero__terrain, .convergence, .skip-link, .colophon__top, .bootnotice { display: none !important; }
+  .masthead, .spine, .pen, .hero__terrain, .convergence, .skip-link, .bootnotice { display: none !important; }
   /* Resume-only download: while `print-resume` is on <body>, hide every
      section but #resume — and inside it, only the sheet itself. */
   body.print-resume #main .section:not(#resume),

@@ -220,15 +220,12 @@ function renderWork() {
   });
 }
 
-/* Projects render as click-to-expand rows: year + title always visible,
-   description, bullets, stack and link open in place on click. */
+/* Projects are always open: title plus full content, no toggle. */
 function buildProject(p, i) {
-  const frame = el("details", ["fold", "fold--project"]);
+  const frame = el("article", ["fold", "fold--project", "fold--static"]);
   frame.id = `project-${p.id}`;
-  /* First project open on load: shows the pattern and the content at once. */
-  if (i === 0) frame.setAttribute("open", "");
 
-  const head = el("summary", "fold__head");
+  const head = el("div", "fold__head");
   const titles = el("span", "fold__titles");
   const meta = el("span", "fold__meta");
   meta.appendChild(el("span", null, p.year));
@@ -236,7 +233,6 @@ function buildProject(p, i) {
   titles.appendChild(meta);
   titles.appendChild(el("span", "fold__title", p.title));
   head.appendChild(titles);
-  head.appendChild(el("span", "fold__sign", "+"));
   frame.appendChild(head);
 
   const body = el("div", "fold__body");
@@ -690,8 +686,6 @@ function renderFooter() {
   if (note) note.textContent = DATA.footer.note;
   const col = mount("[data-footer-colophon]");
   if (col) col.textContent = DATA.footer.colophon;
-  const top = mount("[data-footer-totop]");
-  if (top) top.textContent = DATA.footer.backToTop;
 }
 
 
