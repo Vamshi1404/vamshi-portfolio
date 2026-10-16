@@ -135,10 +135,13 @@
      ================================================================== -->
 <header class="masthead" id="masthead">
   <div class="masthead__inner">
-    <a class="wordmark" href="#top">
+    <a class="wordmark" href="#top" aria-label="Borra Vamshi Thirumal Reddy, back to top">
       <!-- Filled from content.js at runtime. Deliberately empty here so no
-           personal detail is hardcoded in this file. -->
-      <span class="wordmark__text" data-wordmark></span>
+           personal detail is hardcoded in this file. Full name on wide
+           screens, short name below 640px — toggled by CSS only, so screen
+           readers announce the link label exactly once. -->
+      <span class="wordmark__text wordmark__full" data-wordmark-full aria-hidden="true"></span>
+      <span class="wordmark__text wordmark__short" data-wordmark-short aria-hidden="true"></span>
     </a>
     <nav class="nav" id="nav" aria-label="Section navigation" data-nav></nav>
     </div>

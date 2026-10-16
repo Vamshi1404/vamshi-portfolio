@@ -87,8 +87,12 @@ function renderMeta() {
 
 /* --- masthead wordmark + navigation ------------------------------------ */
 function renderChrome() {
-  const mark = q("[data-wordmark]");
-  if (mark) mark.textContent = DATA.person.name;
+  /* Full name on wide screens; first name only below 640px (CSS toggles
+     which span shows, so no JS is involved in the switch). */
+  const full = q("[data-wordmark-full]");
+  if (full) full.textContent = DATA.person.name;
+  const short = q("[data-wordmark-short]");
+  if (short) short.textContent = DATA.person.shortName.split(" ")[0];
 
   const nav = mount("[data-nav]");
   if (!nav) return;

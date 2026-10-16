@@ -126,6 +126,10 @@
   --measure:  38rem;          /* comfortable reading measure */
   --hairline: 1px;
 
+  /* Single source of truth for the fixed header height, safe-area included.
+     Hero offset, anchor offset and section margins all derive from it. */
+  --header-h: calc(4.25rem + env(safe-area-inset-top, 0px));
+
   /* --- motion: one lens (POLISH), one easing family ------------------- */
   --ease-expo:  cubic-bezier(0.16, 1, 0.30, 1);   /* the house entrance   */
   --ease-plot:  cubic-bezier(0.33, 0, 0.15, 1);   /* pen down / pen up    */
@@ -151,7 +155,7 @@ html {
      rules both out, and it keeps scrolling compositor-driven on mobile. */
   overflow-x: clip;
   scroll-behavior: smooth;
-  scroll-padding-top: 5.5rem;
+  scroll-padding-top: calc(var(--header-h) + 1rem);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -399,10 +403,13 @@ html.boot-failed .draw-path { stroke-dashoffset: 0 !important; }
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 90;
+  /* Notch-safe: the safe area pads the bar, and --header-h counts it, so
+     offsets below stay correct on notched phones. */
+  padding-top: env(safe-area-inset-top, 0px);
   background: color-mix(in oklab, var(--paper) 93%, transparent);
   backdrop-filter: blur(10px) saturate(1.1);
   -webkit-backdrop-filter: blur(10px) saturate(1.1);
-  border-bottom: var(--hairline) solid transparent;
+  border-bottom: var(--hairline) solid var(--rule);
   transition: border-color var(--dur-2) var(--ease-swap),
               background var(--dur-2) var(--ease-swap);
 }
@@ -419,6 +426,7 @@ html.boot-failed .draw-path { stroke-dashoffset: 0 !important; }
   align-items: center;
   justify-content: space-between;
   gap: var(--s-5);
+  flex-wrap: nowrap;
 }
 
 /* Reading-progress bar removed: static build, nothing to track. */
@@ -437,7 +445,9 @@ html.boot-failed .draw-path { stroke-dashoffset: 0 !important; }
   white-space: nowrap;
 }
 
-.wordmark__text { overflow: hidden; text-overflow: ellipsis; }
+.wordmark__text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wordmark__short { display: none; }
+.wordmark:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
 
 /* --- nav -------------------------------------------------------------- */
 .nav { display: flex; align-items: center; gap: clamp(0.5rem, 1.6vw, 1.6rem); }
@@ -523,6 +533,7 @@ html.boot-failed .draw-path { stroke-dashoffset: 0 !important; }
   position: relative;
   padding-block: clamp(2rem, 4vw, 3.5rem);
   border-top: var(--hairline) solid var(--rule-strong);
+  scroll-margin-top: calc(var(--header-h) + 0.75rem);
 }
 .section:first-of-type { border-top: 0; }
 
@@ -599,7 +610,7 @@ html.boot-failed .draw-path { stroke-dashoffset: 0 !important; }
   min-height: 80svh;
   display: flex;
   align-items: flex-end;
-  padding-top: 5.5rem;
+  padding-top: calc(var(--header-h) + 1.5rem);
   padding-bottom: clamp(1.5rem, 3vh, 2.5rem);
   overflow: hidden;
   isolation: isolate;
@@ -1826,13 +1837,20 @@ html.js [data-reveal]:not(.is-in) { opacity: 1; transform: none; }
   .sec-head__note { grid-column: 1 / -1; text-align: left; }
 }
 
+/* Below 640px the header is one fixed 60px row: short name left, both
+   actions right, no wrapping. All offsets follow --header-h. At 640px and
+   above the full name shows. */
+@media (max-width: 39.99rem) {
+  :root { --header-h: calc(3.75rem + env(safe-area-inset-top, 0px)); }
+  .masthead__inner { height: 3.75rem; flex-wrap: nowrap; gap: var(--s-3); }
+  .wordmark__full { display: none; }
+  .wordmark__short { display: inline; }
+  .nav { flex-wrap: nowrap; gap: var(--s-3); }
+  .hero { min-height: 0; padding-top: calc(var(--header-h) + 1rem); }
+}
+
 @media (max-width: 40rem) {
   :root { --gutter: 1.125rem; }
-
-  /* Narrow screens: the header wraps to two rows so the full wordmark and
-     both nav links stay visible and tappable. Anchor offset grows to match. */
-  .masthead__inner { height: auto; min-height: 3.75rem; flex-wrap: wrap; row-gap: 0.15rem; padding-block: 0.5rem; }
-  html { scroll-padding-top: 7.5rem; }
 
   /* The nav becomes a horizontally scrollable strip. Still fully keyboard
      reachable, still real links, no hamburger, no hidden menu. */
@@ -1845,7 +1863,7 @@ html.js [data-reveal]:not(.is-in) { opacity: 1; transform: none; }
   }
   .nav::-webkit-scrollbar { display: none; }
 
-  .hero { min-height: 0; padding-top: 6.5rem; }
+  .hero { min-height: 0; }
   .hero__name { max-width: 100%; }
   .hero__statement { font-size: var(--t-body); }
   .hero__actions .btn { flex: 1 1 auto; justify-content: center; }
@@ -1891,12 +1909,12 @@ html.js [data-reveal]:not(.is-in) { opacity: 1; transform: none; }
 }
 
 @media (max-width: 22.5rem) {
-  /* 320px. The nav strip scrolls; nothing wraps into an unreadable column.
-     The wordmark steps down a size rather than being truncated: a clipped
-     name in the header is worse than a slightly smaller one. */
-  .wordmark { font-size: 0.6875rem; letter-spacing: 0.05em; gap: var(--s-2); }
-
-  .nav__link { font-size: 0.625rem; letter-spacing: 0.05em; }
+  /* 320px and other very narrow screens: step type down slightly so the
+     single header row still fits with room to spare. */
+  .wordmark { font-size: 0.625rem; letter-spacing: 0.04em; gap: var(--s-2); }
+  .nav { gap: var(--s-2); }
+  .nav__link { font-size: 0.625rem; letter-spacing: 0.04em; }
+  .nav__link--cta { padding: 0.4rem 0.8rem; }
   .hero__actions { flex-direction: column; align-items: stretch; }
   .plate--hero { grid-template-columns: 1fr; }
   .plate--hero .plate__cell { border-right: 0; border-bottom: var(--hairline) solid var(--rule-soft); }
@@ -1911,7 +1929,7 @@ html.js [data-reveal]:not(.is-in) { opacity: 1; transform: none; }
 /* --- short landscape phones: the hero must not force a scroll-jacked
        feeling, so it compresses rather than hiding content. --- */
 @media (max-height: 34rem) and (orientation: landscape) {
-  .hero { min-height: 100svh; padding-top: 5rem; padding-bottom: var(--s-5); }
+  .hero { min-height: 100svh; padding-top: calc(var(--header-h) + 1rem); padding-bottom: var(--s-5); }
   .hero__statement { display: none; }
   .hero__scroll { display: none; }
   .hero__name { font-size: clamp(1.5rem, 5.2vw, 2.5rem); }
